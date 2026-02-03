@@ -29,11 +29,12 @@ const sharedFade = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
 };
-export default function Home() {
+export default function ProfilePage() {
   const profile = myProfile;
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
+  // Load saved theme from localStorage on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
     if (savedTheme) {
