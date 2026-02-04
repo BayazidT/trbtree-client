@@ -20,16 +20,8 @@ const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.06)' },
   hover: { y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.12)' },
 };
-const cardVariant = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  hover: { y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.12)', transition: { duration: 0.3 } },
-};
-const sharedFade = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
-};
-export default function Home() {
+
+export default function ProfilePage() {
   const profile = myProfile;
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -43,7 +35,6 @@ export default function Home() {
     }
   }, []);
 
-  // Apply theme to document and save to localStorage
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -61,16 +52,13 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       {/* Navbar */}
       <motion.nav
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
         className="fixed top-0 inset-x-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm"
       >
         <div className="container mx-auto px-6 py-5 flex justify-between items-center">
-          <Link
-            href="/"
-            className="text-3xl md:text-4xl font-extrabold text-teal-600 dark:text-teal-400"
-          >
+          <Link href="/" className="text-3xl md:text-4xl font-extrabold text-teal-600 dark:text-teal-400">
             {profile.name}
           </Link>
 
@@ -82,49 +70,24 @@ export default function Home() {
               <Link href="/blog" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
                 Blog
               </Link>
-              <Link
-                href={`/${profile.username}/profile`}
-                className="text-teal-600 dark:text-teal-400 font-semibold"
-              >
+              <Link href={`/${profile.username}/profile`} className="text-teal-600 dark:text-teal-400 font-semibold">
                 Profile
               </Link>
             </div>
 
-            {/* Theme Toggle Button */}
+            {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              aria-label="Toggle dark mode"
+              aria-label="Toggle theme"
               className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
               {theme === 'light' ? (
-                <svg
-                  className="w-6 h-6 text-gray-800 dark:text-gray-200"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                  />
+                <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
               ) : (
-                <svg
-                  className="w-6 h-6 text-yellow-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
+                <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               )}
             </button>
@@ -140,7 +103,7 @@ export default function Home() {
         className="pt-40 pb-24 px-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800"
       >
         <div className="container mx-auto max-w-6xl text-center">
-          <motion.div variants={sharedFade} className="mb-12">
+          <motion.div variants={cardHover} className="mb-12">
             <div className="inline-block p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-100 dark:border-gray-700">
               <Image
                 src={profile.profilePic}
@@ -153,15 +116,15 @@ export default function Home() {
             </div>
           </motion.div>
 
-          <motion.h1 variants={sharedFade} className="text-6xl md:text-7xl font-black text-gray-900 dark:text-white mb-4">
+          <motion.h1 variants={cardHover} className="text-6xl md:text-7xl font-black text-gray-900 dark:text-white mb-4">
             {profile.name}
           </motion.h1>
 
-          <motion.p variants={sharedFade} className="text-3xl md:text-4xl font-light text-teal-600 dark:text-teal-400 mb-12">
+          <motion.p variants={cardHover} className="text-3xl md:text-4xl font-light text-teal-600 dark:text-teal-400 mb-12">
             {profile.designation}
           </motion.p>
 
-          <motion.div variants={sharedFade} className="flex flex-wrap justify-center gap-6">
+          <motion.div variants={cardHover} className="flex flex-wrap justify-center gap-6">
             <motion.a
               href={`mailto:${profile.contact.email}`}
               whileHover={{ scale: 1.08, y: -4 }}
@@ -193,13 +156,32 @@ export default function Home() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          variants={sharedFade}
+          variants={cardHover}
           className="bg-white dark:bg-gray-900 p-10 md:p-14 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
         >
           <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">About Me</h2>
           <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-300">
             {profile.introduction}
           </p>
+        </motion.section>
+
+        {/* Skills */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
+        >
+          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            Skills
+          </h2>
+          <div className="space-y-4">
+            <p className="text-xl"><strong>Languages:</strong> {profile.skills.languages.join(', ')}</p>
+            <p className="text-xl"><strong>Frameworks:</strong> {profile.skills.frameworks.join(', ')}</p>
+            <p className="text-xl"><strong>Tools:</strong> {profile.skills.tools.join(', ')}</p>
+            <p className="text-xl"><strong>Concepts:</strong> {profile.skills.concepts.join(', ')}</p>
+          </div>
         </motion.section>
 
         {/* Education */}
@@ -216,18 +198,17 @@ export default function Home() {
             {profile.education.map((edu, i) => (
               <motion.div
                 key={i}
-                variants={cardHover}
                 initial="rest"
                 whileHover="hover"
+                variants={cardHover}
                 className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
               >
                 <h3 className="text-3xl font-semibold text-teal-700 dark:text-teal-400 mb-3">
                   {edu.degree}
                 </h3>
                 <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
-                  {edu.institution} • {edu.year}
+                  {edu.institution} | {edu.year}
                 </p>
-                {edu.details && <p className="text-gray-700 dark:text-gray-300">{edu.details}</p>}
               </motion.div>
             ))}
           </div>
@@ -247,18 +228,22 @@ export default function Home() {
             {profile.experience.map((exp, i) => (
               <motion.div
                 key={i}
-                variants={cardHover}
                 initial="rest"
                 whileHover="hover"
+                variants={cardHover}
                 className="bg-white dark:bg-gray-900 p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
               >
-                <h3 className="text-3xl font-semibold text-teal-700 dark:text-teal-400 mb-3">
-                  {exp.role}
+                <h3 className="text-3xl font-semibold text-teal-700 dark:text-teal-400 mb-2">
+                  {exp.role} — {exp.company}
                 </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-3">
-                  {exp.company} • {exp.duration}
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">
+                  {exp.duration}
                 </p>
-                <p className="text-xl text-gray-700 dark:text-gray-300">{exp.description}</p>
+                <ul className="list-disc pl-6 space-y-2 text-xl text-gray-700 dark:text-gray-300">
+                  {exp.description.map((bullet, j) => (
+                    <li key={j}>{bullet}</li>
+                  ))}
+                </ul>
               </motion.div>
             ))}
           </div>
@@ -278,43 +263,28 @@ export default function Home() {
             {profile.projects.map((proj, i) => (
               <motion.div
                 key={i}
-                variants={cardHover}
                 initial="rest"
                 whileHover="hover"
+                variants={cardHover}
                 className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md flex flex-col"
               >
                 <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-4">
                   {proj.title}
                 </h3>
-                <p className="text-gray-700 dark:text-gray-300 mb-6 flex-grow">
-                  {proj.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {proj.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="px-4 py-2 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-sm font-medium"
-                    >
-                      {t}
-                    </span>
+                <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 mb-6 flex-grow">
+                  {proj.description.map((bullet, j) => (
+                    <li key={j}>{bullet}</li>
                   ))}
-                </div>
-                {proj.link && (
-                  <a
-                    href={proj.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-auto inline-block text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-semibold"
-                  >
-                    View Project →
-                  </a>
-                )}
+                </ul>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <strong>Tech:</strong> {proj.tech.join(', ')}
+                </p>
               </motion.div>
             ))}
           </div>
         </motion.section>
 
-        {/* Skills */}
+        {/* Languages */}
         <motion.section
           initial="hidden"
           whileInView="visible"
@@ -323,16 +293,108 @@ export default function Home() {
           className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
         >
           <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Skills
+            Languages
           </h2>
           <div className="flex flex-wrap justify-center gap-4">
-            {profile.skills.map((skill) => (
+            {profile.languages.map((lang) => (
               <motion.span
-                key={skill}
+                key={lang}
                 whileHover={{ scale: 1.1 }}
                 className="px-6 py-3 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg font-medium shadow-sm"
               >
-                {skill}
+                {lang}
+              </motion.span>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Certifications */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
+        >
+          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            Certifications
+          </h2>
+          <div className="space-y-6">
+            {profile.certifications.map((cert, i) => (
+              <motion.div
+                key={i}
+                initial="rest"
+                whileHover="hover"
+                variants={cardHover}
+                className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
+              >
+                <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2">
+                  {cert.title}
+                </h3>
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{cert.date}</p>
+                <p className="text-gray-700 dark:text-gray-300">{cert.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Publications */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
+        >
+          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            Publications
+          </h2>
+          <div className="space-y-6">
+            {profile.publications.map((pub, i) => (
+              <motion.div
+                key={i}
+                initial="rest"
+                whileHover="hover"
+                variants={cardHover}
+                className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
+              >
+                <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2">
+                  {pub.title}
+                </h3>
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{pub.date}</p>
+                <p className="text-gray-700 dark:text-gray-300">{pub.description}</p>
+                <a
+                  href={pub.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-2 text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-semibold"
+                >
+                  View Publication →
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Hobbies */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
+        >
+          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            Interests & Hobbies
+          </h2>
+          <div className="flex flex-wrap justify-center gap-4">
+            {profile.hobbies.map((hobby) => (
+              <motion.span
+                key={hobby}
+                whileHover={{ scale: 1.1 }}
+                className="px-6 py-3 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg font-medium shadow-sm"
+              >
+                {hobby}
               </motion.span>
             ))}
           </div>
