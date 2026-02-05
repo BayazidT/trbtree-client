@@ -1,13 +1,13 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { ResumePDF } from './ResumePDF';
-
-// Dynamically import PDFDownloadLink to ensure it only runs in the browser
+const ResumePDF = dynamic(
+  () => import('./ResumePDF').then((mod) => mod.ResumePDF),
+  { ssr: false }
+);
 const PDFDownloadLink = dynamic(
-  () =>
-    import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
-  { ssr: false } // Important: disable server-side rendering
+  () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
+  { ssr: false }
 );
 
 export default function ResumePDFClient() {
