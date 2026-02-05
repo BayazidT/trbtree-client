@@ -1,29 +1,33 @@
-# ---- Build Stage ----
+# syntax=docker/dockerfile:1
+
+# Build stage
 FROM node:20-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json* yarn.lock* ./
-RUN npm ci --omit=dev
+COPY package.json package-lock.json* ./
 
-# Copy the rest of the app
+RUN npm ci
+
 COPY . .
 
-# Build the app with Turbopack (optional, --turbopack works only in dev, build uses standard Next.js build)
 RUN npm run build
 
-# ---- Production Stage ----
+# Production stage
 FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Copy build output and node_modules from builder
-COPY --from=builder /app/ ./
+ENV NODE_ENV=production
+ENV PORT=3000
 
-# Expose port
+# Copy runtime files – use * to make config optional
+COPY --from=builder /app/next.config.* ./   
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
 EXPOSE 3000
 
-# Run the app
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]

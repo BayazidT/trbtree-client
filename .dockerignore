@@ -1,0 +1,9 @@
+# .dockerignore
+node_modules
+.next
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+pnpm-lock.yaml
+README.md

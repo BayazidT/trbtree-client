@@ -5,9 +5,11 @@ import { myProfile } from '@/app/data/profile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import ResumePDFClient from '@/app/components/ResumePDFClient';
-
-
+import dynamic from 'next/dynamic';
+// const ResumePDFClient = dynamic(
+//   () => import('@/app/components/ResumePDFClient'),
+//   { ssr: false }
+// );
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
@@ -397,7 +399,7 @@ export default function ProfilePage() {
       </main>
        {/* ---------------- Floating Resume Button ---------------- */}
       <div className="fixed bottom-6 right-6 z-50">
-        <ResumePDFClient />
+        {/* <ResumePDFClient /> */}
         {/* <PDFDownloadLink document={<ResumePDFClient />} fileName="Bayazid_Talukder_Resume_2025.pdf">
           {({ loading }) => (
             <button
