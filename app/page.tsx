@@ -67,8 +67,8 @@ export default function ProfilePage() {
               <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
                 Home
               </Link>
-              <Link href="/blog" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-                Blog
+              <Link href={`/${profile.username}/bio-data`} className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+                Bio-Data
               </Link>
               <Link href={`/${profile.username}/profile`} className="text-teal-600 dark:text-teal-400 font-semibold">
                 Profile
