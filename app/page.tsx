@@ -50,46 +50,38 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-      {/* Navbar */}
+      {/* ---------------- Navbar ---------------- */}
       <motion.nav
-        initial={{ y: -80, opacity: 0 }}
+        initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="fixed top-0 inset-x-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm"
+        className="fixed inset-x-0 top-0 z-50 bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl border-b border-white/20 dark:border-gray-800/60"
       >
-        <div className="container mx-auto px-6 py-5 flex justify-between items-center">
-          <Link href="/" className="text-3xl md:text-4xl font-extrabold text-teal-600 dark:text-teal-400">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <Link href="/" className="text-2xl font-extrabold text-teal-600 dark:text-teal-400">
             {profile.name}
           </Link>
 
-          <div className="flex items-center space-x-8">
-            <div className="space-x-6 font-medium text-gray-700 dark:text-gray-300">
-              <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-                Home
+          <div className="flex items-center gap-8 text-sm font-medium">
+            {['Home', 'Bio-Data', 'Profile'].map((item) => (
+              <Link
+                key={item}
+                href={item === 'Profile' ? `/${profile.username}/profile` : item === 'Home' ? '/' : `/${profile.username}/bio-data`}
+                className={`relative group ${
+                  item === 'Profile'
+                    ? 'text-teal-600 dark:text-teal-400'
+                    : 'text-gray-600 dark:text-gray-300'
+                }`}
+              >
+                {item}
+                <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-teal-500 transition-all group-hover:w-full" />
               </Link>
-              <Link href={`/${profile.username}/bio-data`} className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-                Bio-Data
-              </Link>
-              <Link href={`/${profile.username}/profile`} className="text-teal-600 dark:text-teal-400 font-semibold">
-                Profile
-              </Link>
-            </div>
+            ))}
 
-            {/* Theme Toggle */}
             <button
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800"
             >
-              {theme === 'light' ? (
-                <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              )}
+              {theme === 'light' ? '🌙' : '☀️'}
             </button>
           </div>
         </div>
