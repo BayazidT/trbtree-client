@@ -1,15 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { myProfile } from '@/app/data/profile';
+import { myBio } from '@/app/data/bio-data';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-// const ResumePDFClient = dynamic(
-//   () => import('@/app/components/ResumePDFClient'),
-//   { ssr: false }
-// );
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
@@ -25,37 +21,27 @@ const cardHover = {
   hover: { y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.12)' },
 };
 
-export default function ProfilePage() {
-  const profile = myProfile;
+export default function BioDataPage() {
+  const profile = myBio;
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
-    }
+    if (savedTheme) setTheme(savedTheme);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark');
   }, []);
 
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    if (theme === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
-
   return (
-     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/40 to-cyan-50/40 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/40 to-cyan-50/40 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
 
-      {/* ---------------- Navbar ---------------- */}
+      {/* Navbar */}
       <motion.nav
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -67,15 +53,11 @@ export default function ProfilePage() {
           </Link>
 
           <div className="flex items-center gap-8 text-sm font-medium">
-            {['Home', 'Bio-Data', 'Profile'].map((item) => (
+            {['Home', 'Bio-Data'].map((item) => (
               <Link
                 key={item}
-                href={item === 'Profile' ? `/${profile.username}/profile` : item === 'Home' ? '/' : `/${profile.username}/bio-data`}
-                className={`relative group ${
-                  item === 'Profile'
-                    ? 'text-teal-600 dark:text-teal-400'
-                    : 'text-gray-600 dark:text-gray-300'
-                }`}
+                href={item === 'Home' ? '/' : `/${profile.username}/bio-data`}
+                className={`relative group ${item === 'Bio-Data' ? 'text-teal-600 dark:text-teal-400' : 'text-gray-600 dark:text-gray-300'}`}
               >
                 {item}
                 <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-teal-500 transition-all group-hover:w-full" />
@@ -92,345 +74,169 @@ export default function ProfilePage() {
         </div>
       </motion.nav>
 
-      {/* Hero */}
-      <motion.section
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
-        className="pt-40 pb-24 px-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800"
+   {/* Hero Section */}
+<motion.section
+  initial="hidden"
+  animate="visible"
+  variants={staggerContainer}
+  className="pt-40 pb-16 px-6 bg-gradient-to-b from-teal-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 text-center"
+>
+  <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+    {/* Sliding Profile Picture */}
+    {profile.profilePic && (
+      <motion.div
+        initial={{ x: -200, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+        className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-teal-300 dark:border-teal-600"
       >
-        <div className="container mx-auto max-w-6xl text-center">
-          <motion.div variants={cardHover} className="mb-12">
-            <div className="inline-block p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-100 dark:border-gray-700">
-              <Image
-                src={profile.profilePic}
-                alt={profile.name}
-                width={200}
-                height={200}
-                className="rounded-full border-4 border-teal-100 dark:border-teal-900 shadow-md object-cover transition-transform hover:scale-105 duration-500"
-                priority
-              />
-            </div>
-          </motion.div>
+        <Image
+          src={profile.profilePic}
+          alt={profile.name}
+          width={200}
+          height={200}
+          className="object-cover w-full h-full"
+        />
+      </motion.div>
+    )}
 
-          <motion.h1 variants={cardHover} className="text-6xl md:text-7xl font-black text-gray-900 dark:text-white mb-4">
-            {profile.name}
-          </motion.h1>
+    {/* Name and Basic Info */}
+    <motion.div
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.2, duration: 0.8 }}
+      className="space-y-2 md:space-y-3 text-center md:text-left"
+    >
+      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+        {profile.name}, {profile.age || 30}
+      </h1>
+      <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300">
+        BSc in CSE
+      </p>
+      <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
+        Software Engineer (Penta Global, Dhaka)
+      </p>
+      <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mt-1">
+        Age Preference: {profile.expectations?.agePreference || 26}
+      </p>
+    </motion.div>
+  </div>
+</motion.section>
 
-          <motion.p variants={cardHover} className="text-3xl md:text-4xl font-light text-teal-600 dark:text-teal-400 mb-12">
-            {profile.designation}
-          </motion.p>
+<main className="container mx-auto px-6 pb-32 max-w-4xl space-y-12">
 
-          <motion.div variants={cardHover} className="flex flex-wrap justify-center gap-6">
-            <motion.a
-              href={`mailto:${profile.contact.email}`}
-              whileHover={{ scale: 1.08, y: -4 }}
-              whileTap={{ scale: 0.96 }}
-              className="px-10 py-5 bg-teal-600 hover:bg-teal-700 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Contact Me
-            </motion.a>
+  {/* Personal Information */}
+  <motion.section
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    variants={cardHover}
+  >
+    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h2>
+    <div className="space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+      <p><strong>Father:</strong> {profile.personalInfo?.fatherName || '-'}</p>
+      <p><strong>Mother:</strong> {profile.personalInfo?.motherName || '-'}</p>
+      <p><strong>Religion:</strong> {profile.personalInfo?.religion || '-'}</p>
+      <p><strong>Address:</strong> {profile.personalInfo?.address || '-'}</p>
+      <p><strong>Siblings:</strong> {profile.personalInfo?.siblings ? `${profile.personalInfo.siblings.brothers} brothers, ${profile.personalInfo.siblings.sisters} sisters` : '-'}</p>
+      <p><strong>Birth Order:</strong> {profile.personalInfo?.birthOrder || '-'}</p>
+      <p><strong>Family Setup:</strong> {profile.personalInfo?.currentFamilySetup || '-'}</p>
+    </div>
+  </motion.section>
 
-            {profile.contact.linkedin && (
-              <motion.a
-                href={profile.contact.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.08, y: -4 }}
-                whileTap={{ scale: 0.96 }}
-                className="px-10 py-5 bg-white dark:bg-gray-800 border-2 border-teal-600 dark:border-teal-400 text-teal-600 dark:text-teal-400 rounded-full font-bold hover:bg-teal-50 dark:hover:bg-gray-700 transition-all duration-300"
-              >
-                LinkedIn
-              </motion.a>
-            )}
-          </motion.div>
-        </div>
-      </motion.section>
+  {/* Education */}
+  <motion.section
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    variants={cardHover}
+  >
+    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Education</h2>
+    <ul className="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+      {profile.education?.length ? profile.education.map((edu, i) => (
+        <li key={i}>{edu.degree} — {edu.institution} ({edu.year})</li>
+      )) : <li>-</li>}
+    </ul>
+  </motion.section>
 
-      <main className="container mx-auto px-6 pb-32 max-w-6xl space-y-32">
-        {/* About Me */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={cardHover}
-          className="bg-white dark:bg-gray-900 p-10 md:p-14 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">About Me</h2>
-          <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-300">
-            {profile.introduction}
-          </p>
-        </motion.section>
-
-        {/* Skills */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Skills
-          </h2>
-          <div className="space-y-4">
-            <p className="text-xl"><strong>Languages:</strong> {profile.skills.languages.join(', ')}</p>
-            <p className="text-xl"><strong>Frameworks:</strong> {profile.skills.frameworks.join(', ')}</p>
-            <p className="text-xl"><strong>Tools:</strong> {profile.skills.tools.join(', ')}</p>
-            <p className="text-xl"><strong>Concepts:</strong> {profile.skills.concepts.join(', ')}</p>
-          </div>
-        </motion.section>
-
-        {/* Education */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-10 text-center md:text-left">
-            Education
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {profile.education.map((edu, i) => (
-              <motion.div
-                key={i}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-              >
-                <h3 className="text-3xl font-semibold text-teal-700 dark:text-teal-400 mb-3">
-                  {edu.degree}
-                </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
-                  {edu.institution} | {edu.year}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Experience */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-10 text-center md:text-left">
-            Experience
-          </h2>
-          <div className="space-y-10">
-            {profile.experience.map((exp, i) => (
-              <motion.div
-                key={i}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-              >
-                <h3 className="text-3xl font-semibold text-teal-700 dark:text-teal-400 mb-2">
-                  {exp.role} — {exp.company}
-                </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">
-                  {exp.duration}
-                </p>
-                <ul className="list-disc pl-6 space-y-2 text-xl text-gray-700 dark:text-gray-300">
-                  {exp.description.map((bullet, j) => (
-                    <li key={j}>{bullet}</li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Projects */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-10 text-center md:text-left">
-            Projects
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {profile.projects.map((proj, i) => (
-              <motion.div
-                key={i}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md flex flex-col"
-              >
-                <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-4">
-                  {proj.title}
-                </h3>
-                <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 mb-6 flex-grow">
-                  {proj.description.map((bullet, j) => (
-                    <li key={j}>{bullet}</li>
-                  ))}
-                </ul>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  <strong>Tech:</strong> {proj.tech.join(', ')}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Languages */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Languages
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {profile.languages.map((lang) => (
-              <motion.span
-                key={lang}
-                whileHover={{ scale: 1.1 }}
-                className="px-6 py-3 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg font-medium shadow-sm"
-              >
-                {lang}
-              </motion.span>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Certifications */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Certifications
-          </h2>
-          <div className="space-y-6">
-            {profile.certifications.map((cert, i) => (
-              <motion.div
-                key={i}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-              >
-                <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2">
-                  {cert.title}
-                </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{cert.date}</p>
-                <p className="text-gray-700 dark:text-gray-300">{cert.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Publications */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Publications
-          </h2>
-          <div className="space-y-6">
-            {profile.publications.map((pub, i) => (
-              <motion.div
-                key={i}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-8 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-              >
-                <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2">
-                  {pub.title}
-                </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{pub.date}</p>
-                <p className="text-gray-700 dark:text-gray-300">{pub.description}</p>
-                <a
-                  href={pub.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-2 text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-semibold"
-                >
-                  View Publication →
-                </a>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Hobbies */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="bg-white dark:bg-gray-900 p-12 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
-        >
-          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-            Interests & Hobbies
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {profile.hobbies.map((hobby) => (
-              <motion.span
-                key={hobby}
-                whileHover={{ scale: 1.1 }}
-                className="px-6 py-3 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg font-medium shadow-sm"
-              >
-                {hobby}
-              </motion.span>
-            ))}
-          </div>
-        </motion.section>
-      </main>
-       {/* ---------------- Floating Resume Button ---------------- */}
-      <div className="fixed bottom-6 right-6 z-50">
-        {/* <ResumePDFClient /> */}
-        {/* <PDFDownloadLink document={<ResumePDFClient />} fileName="Bayazid_Talukder_Resume_2025.pdf">
-          {({ loading }) => (
-            <button
-              disabled={loading}
-              className="px-6 py-4 bg-teal-600 text-white rounded-full shadow-2xl hover:scale-105 transition"
-            >
-              {loading ? 'Generating…' : '⬇ Download CV'}
-            </button>
+  {/* Experience */}
+  <motion.section
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    variants={cardHover}
+  >
+    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Experience</h2>
+    <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+      {profile.experience?.length ? profile.experience.map((exp, i) => (
+        <li key={i}>
+          <strong>{exp.role}</strong> — {exp.company} ({exp.duration})
+          {exp.description?.length && (
+            <ul className="list-disc pl-6 mt-1 space-y-1">
+              {exp.description.map((d, j) => <li key={j}>{d}</li>)}
+            </ul>
           )}
-        </PDFDownloadLink> */}
+        </li>
+      )) : <li>-</li>}
+    </ul>
+  </motion.section>
+
+  {/* Expectations */}
+  <motion.section
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    variants={cardHover}
+  >
+    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Expectations</h2>
+    <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+      <li><strong>Preferred Bride Qualities:</strong> {profile.expectations?.bride?.join(', ') || '-'}</li>
+      <li><strong>Preferred Location:</strong> {profile.expectations?.preferredLocation || '-'}</li>
+      <li><strong>Willing to Shift Abroad:</strong> {profile.expectations?.willingToShiftAbroad ? 'Yes' : 'No'}</li>
+    </ul>
+  </motion.section>
+
+  {/* Additional Info */}
+  {profile.additionalInfo?.length && (
+    <motion.section
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={cardHover}
+    >
+      <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Additional Information</h2>
+      <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+        {profile.additionalInfo.map((info, i) => <li key={i}>{info}</li>)}
+      </ul>
+    </motion.section>
+  )}
+
+  {/* Hobbies */}
+  {profile.hobbies?.length && (
+    <motion.section
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={cardHover}
+      className="text-center"
+    >
+      <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Hobbies & Interests</h2>
+      <div className="flex flex-wrap justify-center gap-3">
+        {profile.hobbies.map((hobby) => (
+          <span
+            key={hobby}
+            className="px-4 py-2 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg md:text-xl font-medium"
+          >
+            {hobby}
+          </span>
+        ))}
       </div>
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-16 mt-20 border-t border-gray-200 dark:border-gray-800"
-      >
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-lg mb-6">
-            © {new Date().getFullYear()} {profile.name}. Built in Berlin.
-          </p>
-          <div className="space-x-8">
-            <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-              Home
-            </Link>
-            <Link href="/blog" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-              Blog
-            </Link>
-          </div>
-        </div>
-      </motion.footer>
+    </motion.section>
+  )}
+
+</main>
+
+
     </div>
   );
 }
