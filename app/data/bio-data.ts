@@ -9,6 +9,8 @@ export interface BioData {
     phone?: string;
     email?: string;
   };
+  latestDesignation?: string;
+  latestDegree?: string;
   personalInfo: {
     fatherName: string;
     motherName: string;
@@ -19,14 +21,26 @@ export interface BioData {
       sisters: number;
       notes?: string;
     };
+    siblingsDetails?: Array<{
+      name?: string;
+      age?: number;
+      occupation?: string;
+      maritalStatus?: string;
+      remarks?: string;
+    }>;
     birthOrder: string;
     currentFamilySetup: string;
+    familyDetails?: {
+      fatherOccupation?: string;
+      motherOccupation?: string;
+    };
   };
   education: Array<{
     degree: string;
     institution: string;
     year: string;
   }>;
+  gallery?: string[];
   experience: Array<{
     role: string;
     company: string;
@@ -52,6 +66,14 @@ export const myBio: BioData = {
     phone: "+49 15755862692",
     email: "bayazidtr@gmail.com",
   },
+  latestDesignation: "Former Software Engineer",
+  latestDegree: "BSc-Computer Science & Engineering",
+  gallery: [
+  '/profile-pic.jpg',
+  '/profile-pic.jpg',
+  '/profile-pic.jpg',
+]
+,
   personalInfo: {
     fatherName: "Md A Satter",
     motherName: "Rokeya Begum",
@@ -62,8 +84,23 @@ export const myBio: BioData = {
       sisters: 3,
       notes: "Groom is 8th among siblings; all elders are married and living separately. The youngest three brothers currently live with parents.",
     },
+    siblingsDetails: [
+      {
+        name: "Elder Brother",
+        age: 32,
+        occupation: "Businessman",
+        maritalStatus: "Married",
+        remarks: "Lives in Sharjah, UAE.",
+      },
+      {
+        name: "Younger Brother",
+        age: 26,
+        occupation: "Newly Graduated",
+        maritalStatus: "Unmarried",
+        remarks: "Resides in Sharjah, UAE.",
+      }],
     birthOrder: "8th child",
-    currentFamilySetup: "Currently living in Germany; youngest three brothers were with parents (late).",
+    currentFamilySetup: "Currently living in Germany; youngest three brothers were with parents until recently but have moved out for work and education. Parents are now living alone in Bangladesh.",
   },
   education: [
     {

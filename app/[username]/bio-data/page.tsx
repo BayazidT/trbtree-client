@@ -24,6 +24,12 @@ const cardHover = {
 export default function BioDataPage() {
   const profile = myBio;
 
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const gallery = profile.gallery ?? [];
+
+
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
@@ -53,10 +59,10 @@ export default function BioDataPage() {
           </Link>
 
           <div className="flex items-center gap-8 text-sm font-medium">
-            {['Home', 'Bio-Data'].map((item) => (
+            {['Home', 'Bio-Data', 'Profile'].map((item) => (
               <Link
                 key={item}
-                href={item === 'Home' ? '/' : `/${profile.username}/bio-data`}
+                href={item === 'Home' ? '/' : `/${profile.username}/${item.toLowerCase()}`}
                 className={`relative group ${item === 'Bio-Data' ? 'text-teal-600 dark:text-teal-400' : 'text-gray-600 dark:text-gray-300'}`}
               >
                 {item}
@@ -74,167 +80,251 @@ export default function BioDataPage() {
         </div>
       </motion.nav>
 
-   {/* Hero Section */}
-<motion.section
-  initial="hidden"
-  animate="visible"
-  variants={staggerContainer}
-  className="pt-40 pb-16 px-6 bg-gradient-to-b from-teal-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 text-center"
->
-  <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-    {/* Sliding Profile Picture */}
-    {profile.profilePic && (
-      <motion.div
-        initial={{ x: -200, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-        className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-teal-300 dark:border-teal-600"
+      {/* Hero Section */}
+      <motion.section
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+        className="pt-40 pb-16 px-6 bg-gradient-to-b from-teal-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 text-center"
       >
-        <Image
-          src={profile.profilePic}
-          alt={profile.name}
-          width={200}
-          height={200}
-          className="object-cover w-full h-full"
-        />
-      </motion.div>
-    )}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+          {/* Sliding Profile Picture */}
+          {profile.profilePic && (
+            <motion.div
+              initial={{ x: -200, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+              className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-teal-300 dark:border-teal-600"
+            >
+              <Image
+                src={profile.profilePic}
+                alt={profile.name}
+                width={200}
+                height={200}
+                className="object-cover w-full h-full"
+              />
 
-    {/* Name and Basic Info */}
-    <motion.div
-      initial={{ y: 50, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.2, duration: 0.8 }}
-      className="space-y-2 md:space-y-3 text-center md:text-left"
-    >
-      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-        {profile.name}, {profile.age || 30}
-      </h1>
-      <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300">
-        BSc in CSE
-      </p>
-      <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
-        Software Engineer (Penta Global, Dhaka)
-      </p>
-      <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mt-1">
-        Age Preference: {profile.expectations?.agePreference || 26}
-      </p>
-    </motion.div>
-  </div>
-</motion.section>
-
-<main className="container mx-auto px-6 pb-32 max-w-4xl space-y-12">
-
-  {/* Personal Information */}
-  <motion.section
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-    variants={cardHover}
-  >
-    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h2>
-    <div className="space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-      <p><strong>Father:</strong> {profile.personalInfo?.fatherName || '-'}</p>
-      <p><strong>Mother:</strong> {profile.personalInfo?.motherName || '-'}</p>
-      <p><strong>Religion:</strong> {profile.personalInfo?.religion || '-'}</p>
-      <p><strong>Address:</strong> {profile.personalInfo?.address || '-'}</p>
-      <p><strong>Siblings:</strong> {profile.personalInfo?.siblings ? `${profile.personalInfo.siblings.brothers} brothers, ${profile.personalInfo.siblings.sisters} sisters` : '-'}</p>
-      <p><strong>Birth Order:</strong> {profile.personalInfo?.birthOrder || '-'}</p>
-      <p><strong>Family Setup:</strong> {profile.personalInfo?.currentFamilySetup || '-'}</p>
-    </div>
-  </motion.section>
-
-  {/* Education */}
-  <motion.section
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-    variants={cardHover}
-  >
-    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Education</h2>
-    <ul className="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-      {profile.education?.length ? profile.education.map((edu, i) => (
-        <li key={i}>{edu.degree} — {edu.institution} ({edu.year})</li>
-      )) : <li>-</li>}
-    </ul>
-  </motion.section>
-
-  {/* Experience */}
-  <motion.section
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-    variants={cardHover}
-  >
-    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Experience</h2>
-    <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-      {profile.experience?.length ? profile.experience.map((exp, i) => (
-        <li key={i}>
-          <strong>{exp.role}</strong> — {exp.company} ({exp.duration})
-          {exp.description?.length && (
-            <ul className="list-disc pl-6 mt-1 space-y-1">
-              {exp.description.map((d, j) => <li key={j}>{d}</li>)}
-            </ul>
+            </motion.div>
           )}
-        </li>
-      )) : <li>-</li>}
-    </ul>
-  </motion.section>
 
-  {/* Expectations */}
-  <motion.section
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true }}
-    variants={cardHover}
-  >
-    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Expectations</h2>
-    <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-      <li><strong>Preferred Bride Qualities:</strong> {profile.expectations?.bride?.join(', ') || '-'}</li>
-      <li><strong>Preferred Location:</strong> {profile.expectations?.preferredLocation || '-'}</li>
-      <li><strong>Willing to Shift Abroad:</strong> {profile.expectations?.willingToShiftAbroad ? 'Yes' : 'No'}</li>
-    </ul>
-  </motion.section>
-
-  {/* Additional Info */}
-  {profile.additionalInfo?.length && (
-    <motion.section
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      variants={cardHover}
-    >
-      <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Additional Information</h2>
-      <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-        {profile.additionalInfo.map((info, i) => <li key={i}>{info}</li>)}
-      </ul>
-    </motion.section>
-  )}
-
-  {/* Hobbies */}
-  {profile.hobbies?.length && (
-    <motion.section
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      variants={cardHover}
-      className="text-center"
-    >
-      <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Hobbies & Interests</h2>
-      <div className="flex flex-wrap justify-center gap-3">
-        {profile.hobbies.map((hobby) => (
-          <span
-            key={hobby}
-            className="px-4 py-2 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg md:text-xl font-medium"
+          {/* Name and Basic Info */}
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="space-y-2 md:space-y-3 text-center md:text-left"
           >
-            {hobby}
-          </span>
-        ))}
-      </div>
-    </motion.section>
-  )}
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+              {profile.name}
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300">
+              {profile.latestDegree}
+            </p>
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
+              {profile.latestDesignation} (Penta Global, Dhaka)
+            </p>
+            {gallery.length > 0 && (
+              <button
+                onClick={() => {
+                  setActiveIndex(0);
+                  setIsGalleryOpen(true);
+                }}
+                className="inline-flex items-center gap-2 mt-4 px-6 py-3 text-lg font-medium
+                    border border-teal-600 text-teal-600
+                    hover:bg-teal-600 hover:text-white
+                    transition rounded-md"
+              >
+                📸 View Photo Gallery
+              </button>
+            )}
+          </motion.div>
+        </div>
+      </motion.section>
 
-</main>
+      <main className="container mx-auto px-6 pb-32 max-w-4xl space-y-12">
+        {/* Personal Information */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={cardHover}
+        >
+          <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-600 dark:text-gray-400">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h2>
+            <p><strong>Father:</strong> {profile.personalInfo?.fatherName || '-'}</p>
+            <p><strong>Mother:</strong> {profile.personalInfo?.motherName || '-'}</p>
+            <p><strong>Religion:</strong> {profile.personalInfo?.religion || '-'}</p>
+            <p><strong>Address:</strong> {profile.personalInfo?.address || '-'}</p>
+            <p><strong>Siblings:</strong> {profile.personalInfo?.siblings ? `${profile.personalInfo.siblings.brothers} brothers, ${profile.personalInfo.siblings.sisters} sisters` : '-'}</p>
+            <p><strong>Birth Order:</strong> {profile.personalInfo?.birthOrder || '-'}</p>
+            <p><strong>Family Setup:</strong> {profile.personalInfo?.currentFamilySetup || '-'}</p>
+          </div>
+          <div className="">
+            {profile.personalInfo?.siblingsDetails?.map((sibling, index) => (
+              <div key={index} className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-600 dark:text-gray-400">
+                <p><strong>{sibling.name}</strong></p>
+                <p>Age: {sibling.age}</p>
+                <p>Occupation: {sibling.occupation}</p>
+                <p>Marital Status: {sibling.maritalStatus}</p>
+                <p>Remarks: {sibling.remarks}</p>
+              </div>
+            )) || 'No additional sibling information.'}
+          </div>
+        </motion.section>
+
+        {/* Education */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={cardHover}
+        >
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Education</h2>
+          <ul className="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+            {profile.education?.length ? profile.education.map((edu, i) => (
+              <li key={i}>{edu.degree} — {edu.institution} ({edu.year})</li>
+            )) : <li>-</li>}
+          </ul>
+        </motion.section>
+
+        {/* Experience */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={cardHover}
+        >
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Experience</h2>
+          <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+            {profile.experience?.length ? profile.experience.map((exp, i) => (
+              <li key={i}>
+                <strong>{exp.role}</strong> — {exp.company} ({exp.duration})
+                {exp.description?.length && (
+                  <ul className="list-disc pl-6 mt-1 space-y-1">
+                    {exp.description.map((d, j) => <li key={j}>{d}</li>)}
+                  </ul>
+                )}
+              </li>
+            )) : <li>-</li>}
+          </ul>
+        </motion.section>
+
+        {/* Expectations */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={cardHover}
+        >
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Expectations</h2>
+          <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+            <li><strong>Preferred Bride Qualities:</strong> {profile.expectations?.bride?.join(', ') || '-'}</li>
+            <li><strong>Preferred Location:</strong> {profile.expectations?.preferredLocation || '-'}</li>
+            <li><strong>Willing to Shift Abroad:</strong> {profile.expectations?.willingToShiftAbroad ? 'Yes' : 'No'}</li>
+          </ul>
+        </motion.section>
+
+        {/* Additional Info */}
+        {profile.additionalInfo?.length && (
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={cardHover}
+          >
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Additional Information</h2>
+            <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
+              {profile.additionalInfo.map((info, i) => <li key={i}>{info}</li>)}
+            </ul>
+          </motion.section>
+        )}
+
+        {/* Hobbies */}
+        {profile.hobbies?.length && (
+          <motion.section
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={cardHover}
+            className="text-center"
+          >
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Hobbies & Interests</h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {profile.hobbies.map((hobby) => (
+                <span
+                  key={hobby}
+                  className="px-4 py-2 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg md:text-xl font-medium"
+                >
+                  {hobby}
+                </span>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+      </main>
+      {isGalleryOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4"
+        >
+          <div className="relative w-full max-w-3xl bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+
+            {/* Close Button */}
+            <button
+              onClick={() => setIsGalleryOpen(false)}
+              className="absolute top-4 right-4 z-50
+                      text-2xl text-gray-700 dark:text-gray-300
+                      hover:text-red-500"
+            >
+              ✕
+            </button>
+
+
+            {/* Image */}
+            <motion.div
+              key={activeIndex}
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -100, opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="relative w-full h-[70vh]"
+            >
+              <Image
+                src={gallery[activeIndex]}
+                alt={`Gallery image ${activeIndex + 1}`}
+                fill
+                className="object-contain"
+              />
+            </motion.div>
+
+            {/* Controls */}
+            <div className="flex justify-between items-center px-6 py-4">
+              <button
+                disabled={activeIndex === 0}
+                onClick={() => setActiveIndex((i) => i - 1)}
+                className="px-4 py-2 text-lg disabled:opacity-40"
+              >
+                ◀ Prev
+              </button>
+
+              <span className="text-sm text-gray-500">
+                {activeIndex + 1} / {gallery.length}
+              </span>
+
+              <button
+                disabled={activeIndex === gallery.length - 1}
+                onClick={() => setActiveIndex((i) => i + 1)}
+                className="px-4 py-2 text-lg disabled:opacity-40"
+              >
+                Next ▶
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
 
     </div>
