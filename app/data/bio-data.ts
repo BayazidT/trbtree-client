@@ -19,7 +19,10 @@ export interface BioData {
     fatherName: string;
     motherName: string;
     religion: string;
-    address: string;
+    presentAddress: string;
+    permanentAddress: string;
+    height?: string;
+    weight?: string;
     siblings: {
       brothers: number;
       sisters: number;
@@ -89,8 +92,11 @@ export const myBio: BioData = {
     maritalStatus: "Unmarried/Never Married",
     dateOfBirth: "05, September 1995",
     placeOfBirth: "Bertala, Sarail, Brahmanbaria",
-    bloodGroup: "A+", 
-    address: "Bertala, Sarail, Brahmanbaria",
+    bloodGroup: "A+",
+    height: "5 feet 5 inches",
+    weight: "70 kg (154 lbs)",
+    presentAddress: "Berlin, Germany",
+    permanentAddress: "Brahmanbaria, Chittagong, Bangladesh",
     siblings: {
       brothers: 6,
       sisters: 3,
@@ -115,6 +121,11 @@ export const myBio: BioData = {
     currentFamilySetup: "Currently the groom is living in Germany as an international student. Before that, the groom worked as a Software Engineer in Bangladesh in different companies. Groom is 8th among siblings; all elders are married and living separately."// The youngest three brothers currently together as a joint family with mother.",
   },
   education: [
+     {
+      degree: "MSc-Cyber Security",
+      institution: "IU International University of Applied Science, Berlin, Germany",
+      year: "April 2025 - Ongoing",
+    },
     {
       degree: "BSc-Computer Science & Engineering",
       institution: "North South University, Dhaka",
