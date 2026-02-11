@@ -392,27 +392,6 @@ export default function ProfilePage() {
           </div>
         </motion.section>
       </main>
-
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-16 mt-20 border-t border-gray-200 dark:border-gray-800"
-      >
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-lg mb-6">
-            © {new Date().getFullYear()} {profile.name}. Built in Berlin.
-          </p>
-          <div className="space-x-8">
-            <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-              Home
-            </Link>
-            <Link href="/blog" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-              Blog
-            </Link>
-          </div>
-        </div>
-      </motion.footer>
     </div>
   );
 }
