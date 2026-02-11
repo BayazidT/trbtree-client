@@ -19,7 +19,10 @@ export interface BioData {
     fatherName: string;
     motherName: string;
     religion: string;
-    address: string;
+    presentAddress: string;
+    permanentAddress: string;
+    height?: string;
+    weight?: string;
     siblings: {
       brothers: number;
       sisters: number;
@@ -89,8 +92,11 @@ export const myBio: BioData = {
     maritalStatus: "Unmarried/Never Married",
     dateOfBirth: "05, September 1995",
     placeOfBirth: "Bertala, Sarail, Brahmanbaria",
-    bloodGroup: "A+", 
-    address: "Bertala, Sarail, Brahmanbaria",
+    bloodGroup: "A+",
+    height: "5 feet 5 inches",
+    weight: "70 kg (154 lbs)",
+    presentAddress: "Berlin, Germany",
+    permanentAddress: "Brahmanbaria, Chittagong, Bangladesh",
     siblings: {
       brothers: 6,
       sisters: 3,

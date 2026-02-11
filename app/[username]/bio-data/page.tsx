@@ -161,8 +161,11 @@ export default function BioDataPage() {
             <p><strong>Date of Birth:</strong> {profile.personalInfo?.dateOfBirth || '-'}</p>
             <p><strong>Place of Birth:</strong> {profile.personalInfo?.placeOfBirth  || '-'}</p>
             <p><strong>Blood Group:</strong> {profile.personalInfo?.bloodGroup || '-'}</p>
+            {/* <p><strong>Height:</strong> {profile.personalInfo?.height || '-'}</p>
+            <p><strong>Weight:</strong> {profile.personalInfo?.weight || '-'}</p> */}
             <p><strong>Marital Status:</strong> {profile.personalInfo?.maritalStatus || '-'}</p>
-            <p><strong>Present Address:</strong> {profile.personalInfo?.address || '-'}</p>
+            <p><strong>Present Address:</strong> {profile.personalInfo?.presentAddress || '-'}</p>
+            <p><strong>Permanent Address:</strong> {profile.personalInfo?.permanentAddress || '-'}</p>
             <p>
               <strong>Siblings:</strong>{' '}
               {profile.personalInfo?.siblings
