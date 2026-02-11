@@ -12,6 +12,10 @@ export interface BioData {
   latestDesignation?: string;
   latestDegree?: string;
   personalInfo: {
+    maritalStatus?: string;
+    dateOfBirth?: string;
+    placeOfBirth?: string;
+    bloodGroup?: string;
     fatherName: string;
     motherName: string;
     religion: string;
@@ -49,8 +53,10 @@ export interface BioData {
   }>;
   hobbies?: string[];
   expectations: {
-    bride: string[];
-    preferredLocation: string;
+    bride: string;
+    educationPreference?: string;
+    professionPreference?: string;
+    locationPreference?: string;
     agePreference?: string;
     willingToShiftAbroad: boolean;
   };
@@ -61,6 +67,7 @@ export const myBio: BioData = {
   username: "bayazid",
   name: "Bayazid Talukder",
   age: 30,
+
   profilePic: "/profile-pic.jpg",
   contact: {
     phone: "+49 15755862692",
@@ -69,15 +76,20 @@ export const myBio: BioData = {
   latestDesignation: "Former Software Engineer",
   latestDegree: "BSc-Computer Science & Engineering",
   gallery: [
-  '/profile-pic.jpg',
-  '/profile-pic.jpg',
-  '/profile-pic.jpg',
+  '/bio_pics/brandenburg.jpg',
+  '/bio_pics/bts1.jpg',
+  '/bio_pics/parkin.jpg',
+  '/bio_pics/bts2.jpg',
 ]
 ,
   personalInfo: {
     fatherName: "Md A Satter",
     motherName: "Rokeya Begum",
     religion: "Islam",
+    maritalStatus: "Unmarried/Never Married",
+    dateOfBirth: "05, September 1995",
+    placeOfBirth: "Bertala, Sarail, Brahmanbaria",
+    bloodGroup: "A+", 
     address: "Bertala, Sarail, Brahmanbaria",
     siblings: {
       brothers: 6,
@@ -121,16 +133,12 @@ export const myBio: BioData = {
     },
   ],
   expectations: {
-    bride: [
-      "Loyal",
-      "Modest",
-      "Well-educated",
-      "Proper religious belief and prayers",
-    ],
-    
-    preferredLocation: "Any district in Bangladesh",
-    agePreference: "Up to 26",
+    bride:"Loyal, Modest, Well-educated, Proper religious belief and prayers, Down to earth, Equal in value and respect, Good family background",
+    educationPreference: "Minimum Bachelor's degree",
+    professionPreference: "Any respectable profession",
     willingToShiftAbroad: true,
+    locationPreference: "Any district in Bangladesh",
+    agePreference: "Up to 26",
   },
   additionalInfo: [
     "Groom currently resides in Germany.",

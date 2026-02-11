@@ -141,126 +141,120 @@ export default function BioDataPage() {
         </div>
       </motion.section>
 
-      <main className="container mx-auto px-6 pb-32 max-w-4xl space-y-12">
+           <main className="max-w-5xl mx-auto px-6 pb-20 space-y-16">
+
         {/* Personal Information */}
         <motion.section
+          variants={cardHover}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          variants={cardHover}
         >
-          <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-600 dark:text-gray-400">
-            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Personal Information</h2>
-            <p><strong>Father:</strong> {profile.personalInfo?.fatherName || '-'}</p>
-            <p><strong>Mother:</strong> {profile.personalInfo?.motherName || '-'}</p>
+          <h2 className="text-3xl font-semibold border-l-4 border-teal-500 pl-3 mb-6">
+            Personal Information
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-y-4 gap-x-12 text-lg text-gray-700 dark:text-gray-300">
+            <p><strong>Father’s Name:</strong> {profile.personalInfo?.fatherName || '-'}</p>
+            <p><strong>Mother’s Name:</strong> {profile.personalInfo?.motherName || '-'}</p>
             <p><strong>Religion:</strong> {profile.personalInfo?.religion || '-'}</p>
-            <p><strong>Address:</strong> {profile.personalInfo?.address || '-'}</p>
-            <p><strong>Siblings:</strong> {profile.personalInfo?.siblings ? `${profile.personalInfo.siblings.brothers} brothers, ${profile.personalInfo.siblings.sisters} sisters` : '-'}</p>
+            <p><strong>Date of Birth:</strong> {profile.personalInfo?.dateOfBirth || '-'}</p>
+            <p><strong>Place of Birth:</strong> {profile.personalInfo?.placeOfBirth  || '-'}</p>
+            <p><strong>Blood Group:</strong> {profile.personalInfo?.bloodGroup || '-'}</p>
+            <p><strong>Marital Status:</strong> {profile.personalInfo?.maritalStatus || '-'}</p>
+            <p><strong>Present Address:</strong> {profile.personalInfo?.address || '-'}</p>
+            <p>
+              <strong>Siblings:</strong>{' '}
+              {profile.personalInfo?.siblings
+                ? `${profile.personalInfo.siblings.brothers} Brother(s), ${profile.personalInfo.siblings.sisters} Sister(s)`
+                : '-'}
+            </p>
             <p><strong>Birth Order:</strong> {profile.personalInfo?.birthOrder || '-'}</p>
-            <p><strong>Family Setup:</strong> {profile.personalInfo?.currentFamilySetup || '-'}</p>
-          </div>
-          <div className="">
-            {profile.personalInfo?.siblingsDetails?.map((sibling, index) => (
-              <div key={index} className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-600 dark:text-gray-400">
-                <p><strong>{sibling.name}</strong></p>
-                <p>Age: {sibling.age}</p>
-                <p>Occupation: {sibling.occupation}</p>
-                <p>Marital Status: {sibling.maritalStatus}</p>
-                <p>Remarks: {sibling.remarks}</p>
-              </div>
-            )) || 'No additional sibling information.'}
           </div>
         </motion.section>
 
         {/* Education */}
         <motion.section
+          variants={cardHover}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          variants={cardHover}
         >
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Education</h2>
-          <ul className="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-            {profile.education?.length ? profile.education.map((edu, i) => (
-              <li key={i}>{edu.degree} — {edu.institution} ({edu.year})</li>
-            )) : <li>-</li>}
+          <h2 className="text-3xl font-semibold border-l-4 border-teal-500 pl-3 mb-6">
+            Educational Qualification
+          </h2>
+
+          <ul className="space-y-4 text-lg text-gray-700 dark:text-gray-300">
+            {profile.education?.map((edu, idx) => (
+              <li key={idx} className="pb-3">
+                <p className="font-medium">{edu.degree}</p>
+                <p>{edu.institution}</p>
+                <p className="text-sm text-gray-500">{edu.year}</p>
+              </li>
+            )) || <p>-</p>}
           </ul>
         </motion.section>
 
-        {/* Experience */}
+        {/* Professional Experience */}
         <motion.section
+          variants={cardHover}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          variants={cardHover}
         >
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Experience</h2>
-          <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-            {profile.experience?.length ? profile.experience.map((exp, i) => (
-              <li key={i}>
-                <strong>{exp.role}</strong> — {exp.company} ({exp.duration})
-                {exp.description?.length && (
-                  <ul className="list-disc pl-6 mt-1 space-y-1">
-                    {exp.description.map((d, j) => <li key={j}>{d}</li>)}
-                  </ul>
-                )}
+          <h2 className="text-3xl font-semibold border-l-4 border-teal-500 pl-3 mb-6">
+            Professional Experience
+          </h2>
+
+          <ul className="space-y-4 text-lg text-gray-700 dark:text-gray-300">
+            {profile.experience?.map((job, idx) => (
+              <li key={idx} className="pb-3">
+                <p className="font-medium">
+                  {job.role} — {job.company}
+                </p>
+                <p className="text-sm text-gray-500">{job.duration}</p>
               </li>
-            )) : <li>-</li>}
+            )) || <p>-</p>}
           </ul>
+        </motion.section>
+         {/* Hobbies */}
+        <motion.section
+          variants={cardHover}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl font-semibold border-l-4 border-teal-500 pl-3 mb-6">
+            Hobbies & Interests
+          </h2>
+
+          <p className="text-lg text-gray-700 dark:text-gray-300">
+            {profile.hobbies?.join(', ') || '-'}
+          </p>
         </motion.section>
 
         {/* Expectations */}
         <motion.section
+          variants={cardHover}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          variants={cardHover}
         >
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Expectations</h2>
-          <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-            <li><strong>Preferred Bride Qualities:</strong> {profile.expectations?.bride?.join(', ') || '-'}</li>
-            <li><strong>Preferred Location:</strong> {profile.expectations?.preferredLocation || '-'}</li>
-            <li><strong>Willing to Shift Abroad:</strong> {profile.expectations?.willingToShiftAbroad ? 'Yes' : 'No'}</li>
-          </ul>
+          <h2 className="text-3xl font-semibold border-l-4 border-teal-500 pl-3 mb-6">
+            Expectations
+          </h2>
+
+          <div className="space-y-2 text-lg text-gray-700 dark:text-gray-300">
+            <p><strong>Preferred Age:</strong> {profile.expectations?.agePreference || '-'}</p>
+            <p><strong>Education:</strong> {profile.expectations?.educationPreference || '-'}</p>
+            <p><strong>Profession:</strong> {profile.expectations?.professionPreference || '-'}</p>
+            <p><strong>Location:</strong> {profile.expectations?.locationPreference || '-'}</p>
+            <p><strong>Willing to Shift Abroad:</strong> {profile.expectations?.willingToShiftAbroad ? 'Yes' : 'No'}</p>
+            <p>{profile.expectations?.bride.toLocaleString() || '-Loyal, modest, down to earth, equal in value and respect.......'}</p>
+          </div>
         </motion.section>
 
-        {/* Additional Info */}
-        {profile.additionalInfo?.length && (
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={cardHover}
-          >
-            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Additional Information</h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300 text-lg md:text-xl">
-              {profile.additionalInfo.map((info, i) => <li key={i}>{info}</li>)}
-            </ul>
-          </motion.section>
-        )}
-
-        {/* Hobbies */}
-        {profile.hobbies?.length && (
-          <motion.section
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={cardHover}
-            className="text-center"
-          >
-            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">Hobbies & Interests</h2>
-            <div className="flex flex-wrap justify-center gap-3">
-              {profile.hobbies.map((hobby) => (
-                <span
-                  key={hobby}
-                  className="px-4 py-2 bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 rounded-full text-lg md:text-xl font-medium"
-                >
-                  {hobby}
-                </span>
-              ))}
-            </div>
-          </motion.section>
-        )}
+       
 
       </main>
       {isGalleryOpen && (
