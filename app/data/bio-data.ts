@@ -112,13 +112,23 @@ export const myBio: BioData = {
         remarks: "Resides in Sharjah, UAE.",
       }],
     birthOrder: "8th child",
-    currentFamilySetup: "Currently living in Germany; youngest three brothers were with parents until recently but have moved out for work and education. Parents are now living alone in Bangladesh.",
+    currentFamilySetup: "Currently the groom is living in Germany as an international student. Before that, the groom worked as a Software Engineer in Bangladesh in different companies. Groom is 8th among siblings; all elders are married and living separately."// The youngest three brothers currently together as a joint family with mother.",
   },
   education: [
     {
       degree: "BSc-Computer Science & Engineering",
       institution: "North South University, Dhaka",
       year: "June 2017 - May 2021",
+    },
+    {
+      degree: "Higher Secondary Certificate (HSC) - 2015",
+      institution: "Milestone College, Dhaka",
+      year: "July 2013 - May 2015",
+    },
+    {
+      degree: "Secondary School Certificate (SSC) - 2013",
+      institution: "Kamaura Shaheed Smrity High School, Brahmanbaria",
+      year: "January 2008 - March 2013",
     },
   ],
   experience: [
@@ -131,18 +141,36 @@ export const myBio: BioData = {
         "Implemented IAM servers for role-based access control and secure authentication.",
       ],
     },
+    {
+      role: "Junior Software Engineer",
+      company: "Praava Health, Dhaka",
+      duration: "August 2022 - July 2023",
+      description: [
+        "Developed backend services using Java Spring Boot with multi-module architecture.",
+        "Implemented IAM servers for role-based access control and secure authentication.",
+      ],
+    },
+    {
+      role: "Junior Officer - ICT",
+      company: "GPH Ispat, Dhaka",
+      duration: "January 2022 - July 2022",
+      description: [
+        "Developed backend services using Java Spring Boot with multi-module architecture.",
+        "Implemented IAM servers for role-based access control and secure authentication.",
+      ],
+    },
   ],
+  hobbies: ["Traveling", "Writing", "Research"],
   expectations: {
-    bride:"Loyal, Modest, Well-educated, Proper religious belief and prayers, Down to earth, Equal in value and respect, Good family background",
-    educationPreference: "Minimum Bachelor's degree",
-    professionPreference: "Any respectable profession",
+    bride:"Loyal, Modest, Well-educated, Proper religious belief and prayers, Down to earth, Equal in value and respect, Good family background, None smoker, None alcoholic, Values family unity and religious observance.",
+    educationPreference: "Bachelor's degree complete/running preferred but not mandatory",
+    professionPreference: "Not mandatory.",
     willingToShiftAbroad: true,
     locationPreference: "Any district in Bangladesh",
-    agePreference: "Up to 26",
+    agePreference: "Compatible with groom's age",
   },
   additionalInfo: [
-    "Groom currently resides in Germany.",
+    "None smoker, None alcoholic",
     "Values family unity and religious observance.",
-    "Enjoys traveling, writing, and research."
   ],
 };
