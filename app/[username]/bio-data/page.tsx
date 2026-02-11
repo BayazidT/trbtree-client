@@ -171,6 +171,25 @@ export default function BioDataPage() {
             </p>
             <p><strong>Birth Order:</strong> {profile.personalInfo?.birthOrder || '-'}</p>
           </div>
+          <div>
+            {profile.personalInfo?.currentFamilySetup && (
+              <div className="mt-6">
+            <h4 className="text-xl font-medium mb-2">
+            Current Family Setup
+          </h4>                <p className="text-gray-700 dark:text-gray-300">{profile.personalInfo.currentFamilySetup}</p>
+              </div>
+            )}
+          </div>
+           <div>
+            {profile.personalInfo?.currentFamilySetup && (
+              <div className="mt-6">
+            <h4 className="text-xl font-medium mb-2">
+            Additional Notes
+          </h4>
+          <p className="text-gray-700 dark:text-gray-300">{profile.additionalInfo?.join(', ') || '-'}</p>
+              </div>
+            )}
+          </div>
         </motion.section>
 
         {/* Education */}
