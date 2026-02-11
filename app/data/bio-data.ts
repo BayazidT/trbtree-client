@@ -121,6 +121,11 @@ export const myBio: BioData = {
     currentFamilySetup: "Currently the groom is living in Germany as an international student. Before that, the groom worked as a Software Engineer in Bangladesh in different companies. Groom is 8th among siblings; all elders are married and living separately."// The youngest three brothers currently together as a joint family with mother.",
   },
   education: [
+     {
+      degree: "MSc-Cyber Security",
+      institution: "IU International University of Applied Science, Berlin, Germany",
+      year: "April 2025 - Ongoing",
+    },
     {
       degree: "BSc-Computer Science & Engineering",
       institution: "North South University, Dhaka",
