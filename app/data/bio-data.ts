@@ -100,7 +100,7 @@ export const myBio: BioData = {
     siblings: {
       brothers: 6,
       sisters: 3,
-      notes: "Groom is 8th among siblings; all elders are married and living separately. The youngest three brothers currently live with parents.",
+      notes: "All elder siblings are married and living separately.",
     },
     siblingsDetails: [
       {
@@ -118,13 +118,13 @@ export const myBio: BioData = {
         remarks: "Resides in Sharjah, UAE.",
       }],
     birthOrder: "8th child",
-    currentFamilySetup: "Currently the groom is living in Germany as an international student. Before that, the groom worked as a Software Engineer in Bangladesh in different companies. Groom is 8th among siblings; all elders are married and living separately."// The youngest three brothers currently together as a joint family with mother.",
+    currentFamilySetup: "Currently living in Germany as an international student. Previously worked as a Software Engineer in Bangladesh. Family follows strong joint family values with emphasis on religious observance and unity."// The youngest three brothers currently together as a joint family with mother.",
   },
   education: [
      {
       degree: "Engineering for Sustainability",
       institution: "Rhine-Waal University of Applied Sciences, Germany",
-      year: "April 2025 - Ongoing",
+      year: "Ongoing",
     },
     {
       degree: "Computer Science & Engineering",
@@ -148,8 +148,7 @@ export const myBio: BioData = {
       company: "Penta Global Limited, Dhaka",
       duration: "August 2023 - March 2025",
       description: [
-        "Developed backend services using Java Spring Boot with multi-module architecture.",
-        "Implemented IAM servers for role-based access control and secure authentication.",
+
       ],
     },
     {
@@ -157,8 +156,6 @@ export const myBio: BioData = {
       company: "Praava Health, Dhaka",
       duration: "August 2022 - July 2023",
       description: [
-        "Developed backend services using Java Spring Boot with multi-module architecture.",
-        "Implemented IAM servers for role-based access control and secure authentication.",
       ],
     },
     {
@@ -166,14 +163,12 @@ export const myBio: BioData = {
       company: "GPH Ispat, Dhaka",
       duration: "January 2022 - July 2022",
       description: [
-        "Developed backend services using Java Spring Boot with multi-module architecture.",
-        "Implemented IAM servers for role-based access control and secure authentication.",
       ],
     },
   ],
   hobbies: ["Traveling", "Writing", "Research"],
   expectations: {
-    bride:"Loyal, Modest, Well-educated, Proper religious belief and prayers, Down to earth, Equal in value and respect, Good family background, None smoker, None alcoholic, Values family unity and religious observance.",
+    bride:"Non-smoker and non-alcoholic, Values family unity and religious observance",
     educationPreference: "Bachelor's degree complete/running preferred but not mandatory",
     professionPreference: "Not mandatory.",
     willingToShiftAbroad: true,
@@ -181,7 +176,7 @@ export const myBio: BioData = {
     agePreference: "Compatible with groom's age",
   },
   additionalInfo: [
-    "None smoker, None alcoholic",
+    "Non-smoker, Non-alcoholic",
     "Values family unity and religious observance.",
   ],
 };
