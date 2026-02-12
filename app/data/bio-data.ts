@@ -122,12 +122,12 @@ export const myBio: BioData = {
   },
   education: [
      {
-      degree: "MSc-Cyber Security",
-      institution: "IU International University of Applied Science, Berlin, Germany",
+      degree: "Engineering for Sustainability",
+      institution: "Rhine-Waal University of Applied Sciences, Germany",
       year: "April 2025 - Ongoing",
     },
     {
-      degree: "BSc-Computer Science & Engineering",
+      degree: "Computer Science & Engineering",
       institution: "North South University, Dhaka",
       year: "June 2017 - May 2021",
     },
