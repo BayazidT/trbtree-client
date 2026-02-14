@@ -63,9 +63,9 @@ export const myProfile: ProfileData = {
   introduction: "To contribute as a dedicated software engineer specializing in backend development, leveraging expertise in Java, Spring Boot, and best coding practices to deliver scalable, maintainable, and high-quality software solutions. Committed to utilizing strong analytical, problem-solving, leadership, and communication skills to drive success in collaborative development environments.",
   education: [
     {
-      degree: "MSc-Cyber Security",
-      institution: "IU International University of Applied Science",
-      year: "April 2025 - Ongoing",
+      degree: "Engineering for Sustainability",
+      institution: "Rhine-Waal University of Applied Sciences, Germany",
+      year: "Ongoing",
     },
     {
       degree: "BSc-Computer Science & Engineering",
