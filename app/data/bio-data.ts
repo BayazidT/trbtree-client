@@ -90,9 +90,9 @@ export const myBio: BioData = {
     motherName: "Rokeya Begum",
     religion: "Islam",
     maritalStatus: "Unmarried/Never Married",
-    dateOfBirth: "05, September 1995",
+    dateOfBirth: "September 5, 1995",
     placeOfBirth: "Bertala, Sarail, Brahmanbaria",
-    bloodGroup: "A+",
+    bloodGroup: "A(+)",
     height: "5 feet 5 inches",
     weight: "70 kg (154 lbs)",
     presentAddress: "Berlin, Germany",
@@ -136,11 +136,11 @@ export const myBio: BioData = {
       institution: "Milestone College, Dhaka",
       year: "July 2013 - May 2015",
     },
-    {
-      degree: "Secondary School Certificate (SSC) - 2013",
-      institution: "Kamaura Shaheed Smrity High School, Brahmanbaria",
-      year: "January 2008 - March 2013",
-    },
+    // {
+    //   degree: "Secondary School Certificate (SSC) - 2013",
+    //   institution: "Kamaura Shaheed Smrity High School, Brahmanbaria",
+    //   year: "January 2008 - March 2013",
+    // },
   ],
   experience: [
     {
