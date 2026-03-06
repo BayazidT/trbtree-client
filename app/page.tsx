@@ -73,37 +73,7 @@ export default function FeedPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-      {/* Navbar */}
-      <motion.nav
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="fixed inset-x-0 top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800"
-      >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-extrabold text-teal-600 dark:text-teal-400">
-            {profile.name}
-          </Link>
-          <div className="flex items-center gap-8 text-sm font-medium">
-            {['Home', 'Bio-Data', 'Profile'].map((item) => (
-              <Link
-                key={item}
-                href={item === 'Profile' ? `/${profile.username}/profile` : item === 'Home' ? '/' : `/${profile.username}/bio-data`}
-                className={`relative group ${item === 'Home' ? 'text-teal-600 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300'}`}
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-teal-500 transition-all group-hover:w-full" />
-              </Link>
-            ))}
-            <button
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
-            >
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
-          </div>
-        </div>
-      </motion.nav>
-
+    
       {/* Main layout */}
       <div className="flex mt-[80px] h-[calc(100vh-80px)]">
         {/* Left: Suggested Users */}
