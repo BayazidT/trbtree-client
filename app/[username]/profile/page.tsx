@@ -5,7 +5,6 @@ import { myProfile } from '@/app/data/profile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
 // const ResumePDFClient = dynamic(
 //   () => import('@/app/components/ResumePDFClient'),
 //   { ssr: false }
@@ -54,44 +53,6 @@ export default function ProfilePage() {
 
   return (
      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/40 to-cyan-50/40 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
-
-      {/* ---------------- Navbar ---------------- */}
-      <motion.nav
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="fixed inset-x-0 top-0 z-50 bg-white/70 dark:bg-gray-900/60 backdrop-blur-xl border-b border-white/20 dark:border-gray-800/60"
-      >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-extrabold text-teal-600 dark:text-teal-400">
-            {profile.name}
-          </Link>
-
-          <div className="flex items-center gap-8 text-sm font-medium">
-            {['Home', 'Bio-Data', 'Profile'].map((item) => (
-              <Link
-                key={item}
-                href={item === 'Profile' ? `/${profile.username}/profile` : item === 'Home' ? '/' : `/${profile.username}/bio-data`}
-                className={`relative group ${
-                  item === 'Profile'
-                    ? 'text-teal-600 dark:text-teal-400'
-                    : 'text-gray-600 dark:text-gray-300'
-                }`}
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-teal-500 transition-all group-hover:w-full" />
-              </Link>
-            ))}
-
-            <button
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800"
-            >
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
-          </div>
-        </div>
-      </motion.nav>
-
       {/* Hero */}
       <motion.section
         initial="hidden"
