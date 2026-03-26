@@ -39,7 +39,7 @@ export default function Header() {
           href="/"
           className="text-2xl font-extrabold text-teal-600 dark:text-teal-400"
         >
-          {profile.name}
+          TRBTREE
         </Link>
 
         {/* Desktop Menu */}
