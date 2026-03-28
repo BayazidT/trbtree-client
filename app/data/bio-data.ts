@@ -95,7 +95,7 @@ export const myBio: BioData = {
     bloodGroup: "A(+)",
     height: "5 feet 5 inches",
     weight: "70 kg (154 lbs)",
-    presentAddress: "Berlin, Germany",
+    presentAddress: "Germany",
     permanentAddress: "Brahmanbaria, Chittagong, Bangladesh",
     siblings: {
       brothers: 6,
