@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getUser } from '../data/user';
+import { getUser } from '../../data/user';
 
 export default function UsersPage() {
   const [user, setUser] = useState<any>(null);
