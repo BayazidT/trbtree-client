@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { myBio } from '@/app/data/bio-data';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import Logo from './Logo';
 
 export default function Header() {
   const profile = myBio;
@@ -35,12 +36,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         
         {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl font-extrabold text-teal-600 dark:text-teal-400"
-        >
-          TRBTREE
-        </Link>
+       <Logo />
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
