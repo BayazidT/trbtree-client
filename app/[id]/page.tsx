@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react';
 import { myProfile } from '@/app/data/profile';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getUser, getUserById } from '../data/user';
+import { getUser, getUserById, getUserProfileById } from '../data/user';
+import { getResumeUserById } from '../data/resume';
 import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import { use } from 'react';
 import { User } from '../types/auth.types';
+import { UserProfile } from '../types/user.types';
+import { ResumeData } from '../types/resume.types';
 // const ResumePDFClient = dynamic(
 //   () => import('@/app/components/ResumePDFClient'),
 //   { ssr: false }
@@ -32,6 +35,8 @@ export default function ProfilePage() {
   const { id } = useParams();
   const [user, setUser] = useState<User | null>(null);
   const profile = myProfile;
+  const [ userProfile, setUserProfile ] = useState<UserProfile | null>(null);
+  const [ resumeData, setResumeData] = useState<ResumeData | null>(null);
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
@@ -56,16 +61,41 @@ export default function ProfilePage() {
   useEffect(() => {   
     if (!id || Array.isArray(id)) return;
     getUserDetails(id).then(setUser);
+    getUserProfile(id).then(setUserProfile);
   }, [id]);
+
+  useEffect(() =>{
+    if (!id || Array.isArray(id)) return;
+    getUserResume(id).then(setResumeData);
+  },[id]);
 
   const getUserDetails = async (id: string) => {
     try {
       const user = await getUserById(id);
+      
       return user;
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
   };
+
+  const getUserProfile = async (id: string) => {
+    try {
+      const profile = await getUserProfileById(id);
+      return profile;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+
+  const getUserResume = async (id: string) =>{
+    try {
+      const resume = await getResumeUserById(id);
+      return resume;
+    } catch (error) {
+        console.error('Error fetching user resume:', error);
+    }
+  }
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -99,12 +129,12 @@ export default function ProfilePage() {
           </motion.h1>
 
           <motion.p variants={cardHover} className="text-3xl md:text-4xl font-light text-teal-600 dark:text-teal-400 mb-12">
-            {profile.designation}
+            {userProfile?.currentDesignation || profile.designation}
           </motion.p>
 
           <motion.div variants={cardHover} className="flex flex-wrap justify-center gap-6">
             <motion.a
-              href={`mailto:${profile.contact.email}`}
+              href={`mailto:${userProfile?.displayEmail || profile.contact.email}`}
               whileHover={{ scale: 1.08, y: -4 }}
               whileTap={{ scale: 0.96 }}
               className="px-10 py-5 bg-teal-600 hover:bg-teal-700 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300"
@@ -114,7 +144,7 @@ export default function ProfilePage() {
 
             {profile.contact.linkedin && (
               <motion.a
-                href={profile.contact.linkedin}
+                href={userProfile?.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.08, y: -4 }}
@@ -139,9 +169,8 @@ export default function ProfilePage() {
         >
           <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">About Me</h2>
           <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-300">
-            {profile.introduction}
+            {userProfile?.introduction}
           </p>
-          <h1>User ID: {id}</h1>
         </motion.section>
 
         {/* Skills */}
@@ -174,7 +203,7 @@ export default function ProfilePage() {
             Education
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            {profile.education.map((edu, i) => (
+            {resumeData?.educations.map((edu, i) => (
               <motion.div
                 key={i}
                 initial="rest"
@@ -186,7 +215,7 @@ export default function ProfilePage() {
                   {edu.degree}
                 </h3>
                 <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
-                  {edu.institution} | {edu.year}
+                  {edu.institution} | {edu.endYear}
                 </p>
               </motion.div>
             ))}
@@ -204,7 +233,7 @@ export default function ProfilePage() {
             Experience
           </h2>
           <div className="space-y-10">
-            {profile.experience.map((exp, i) => (
+            {resumeData?.experiences.map((exp, i) => (
               <motion.div
                 key={i}
                 initial="rest"
@@ -213,13 +242,13 @@ export default function ProfilePage() {
                 className="bg-white dark:bg-gray-900 p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-md"
               >
                 <h3 className="text-3xl font-semibold text-teal-700 dark:text-teal-400 mb-2">
-                  {exp.role} — {exp.company}
+                  {exp.jobTitle} — {exp.companyName}
                 </h3>
                 <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">
-                  {exp.duration}
+                  {exp.durationText}
                 </p>
                 <ul className="list-disc pl-6 space-y-2 text-xl text-gray-700 dark:text-gray-300">
-                  {exp.description.map((bullet, j) => (
+                  {exp?.responsibilities.map((bullet, j) => (
                     <li key={j}>{bullet}</li>
                   ))}
                 </ul>
@@ -239,7 +268,7 @@ export default function ProfilePage() {
             Projects
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {profile.projects.map((proj, i) => (
+            {resumeData?.projects.map((proj, i) => (
               <motion.div
                 key={i}
                 initial="rest"
@@ -256,7 +285,7 @@ export default function ProfilePage() {
                   ))}
                 </ul>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  <strong>Tech:</strong> {proj.tech.join(', ')}
+                  <strong>Tech:</strong> {proj.technologies.join(', ')}
                 </p>
               </motion.div>
             ))}
@@ -299,7 +328,7 @@ export default function ProfilePage() {
             Certifications
           </h2>
           <div className="space-y-6">
-            {profile.certifications.map((cert, i) => (
+            {resumeData?.certifications.map((cert, i) => (
               <motion.div
                 key={i}
                 initial="rest"
@@ -310,7 +339,7 @@ export default function ProfilePage() {
                 <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2">
                   {cert.title}
                 </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{cert.date}</p>
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{cert.issueDate}</p>
                 <p className="text-gray-700 dark:text-gray-300">{cert.description}</p>
               </motion.div>
             ))}
@@ -329,7 +358,7 @@ export default function ProfilePage() {
             Publications
           </h2>
           <div className="space-y-6">
-            {profile.publications.map((pub, i) => (
+            {resumeData?.publications.map((pub, i) => (
               <motion.div
                 key={i}
                 initial="rest"
@@ -340,10 +369,10 @@ export default function ProfilePage() {
                 <h3 className="text-2xl font-bold text-teal-700 dark:text-teal-400 mb-2">
                   {pub.title}
                 </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{pub.date}</p>
+                <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{pub.publicationDate}</p>
                 <p className="text-gray-700 dark:text-gray-300">{pub.description}</p>
                 <a
-                  href={pub.link}
+                  href={pub.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block mt-2 text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-semibold"

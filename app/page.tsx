@@ -94,7 +94,7 @@ export default function FeedPage() {
       <div className="flex mt-[80px] h-[calc(100vh-80px)]">
         {/* Left: Suggested Users */}
         <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto bg-gray-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 p-6 space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Suggested Users</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Suggested Leaf</h2>
           <div className="space-y-4">
             {usersList.content.map((user) => (
               <motion.div

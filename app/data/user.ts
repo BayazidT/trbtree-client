@@ -7,3 +7,7 @@ export const getUser = async () => {
 export const getUserById = async (id: string) => {
   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/users/${id}`);
 };
+
+export const getUserProfileById = async (id: string) => {
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/profiles/${id}`);
+};
