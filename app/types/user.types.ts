@@ -25,3 +25,26 @@ export interface UserRequest {
   email: string;
   roleId: string;
 }
+
+
+export interface UserProfile {
+  displayEmail?: string;
+  displayPhone?: string;
+  headline?: string;
+  currentDesignation?: string;
+  designation?: string;
+  profilePictureUrl?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+  introduction?: string;
+}
+
+//   "email": "test@gmail.com",
+//   "phone": "0329829483484",
+//   "headline": "This is testing in dev",
+//   "currentDesignation": "Nothing Important",
+//   "profilePictureUrl": "no pro",
+//   "introduction": "What to say about?",
+//   "openToWork": true,
+//   "linkedinUrl": "string",
+//   "githubUrl": "string",
