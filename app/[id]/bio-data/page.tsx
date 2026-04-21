@@ -1,10 +1,15 @@
 'use client';
 
+import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { myBio } from '@/app/data/bio-data';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { getBioDataUserById } from '@/app/data/bio-data-api';
+import { BioData } from '@/app/types/bio-data.types';
+import { getUserById } from '@/app/data/user';
+import { User } from '@/app/types/user.types';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -22,6 +27,9 @@ const cardHover = {
 };
 
 export default function BioDataPage() {
+  const { id } = useParams();
+  const [bioData, setBioData] = useState<BioData| null>(null);
+  const [user, setUser] = useState<User| null > (null);
   const profile = myBio;
 
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -43,6 +51,42 @@ export default function BioDataPage() {
     else document.documentElement.classList.remove('dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  useEffect(() =>{
+    if (!id || Array.isArray(id)) return;
+    getBioData(id).then(setBioData);
+    getUser(id).then(setUser);
+  }, [id])
+
+  const getBioData = async(id: string) => {
+    try {
+    const bio_data = await getBioDataUserById(id);
+    return bio_data;
+    
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const getUser = async(id: string) =>{
+    try {
+      const user = await getUserById(id);
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  if(bioData == null){
+    return(
+          <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/40 to-cyan-50/40 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
+            <div className='flex-center m-8 p-5'>
+
+            </div>
+            <h3 className='text-center m-5 p-5'>No Bio Data Found!!</h3>
+
+</div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/40 to-cyan-50/40 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
@@ -81,13 +125,13 @@ export default function BioDataPage() {
             className="space-y-2 md:space-y-3 text-center md:text-left"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-              {profile.name}
+              {user?.name}
             </h1>
             <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300">
-              {profile.latestDegree}
+              {bioData?.highestEducation}
             </p>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
-              {profile.latestDesignation} (Penta Global, Dhaka)
+              {bioData?.occupation} | {bioData?.companyName}
             </p>
             {gallery.length > 0 && (
               <button
@@ -123,39 +167,31 @@ export default function BioDataPage() {
           <div className="grid md:grid-cols-2 gap-y-4 gap-x-12 text-lg text-gray-700 dark:text-gray-300">
             <p><strong>Father’s Name:</strong> {profile.personalInfo?.fatherName || '-'}</p>
             <p><strong>Mother’s Name:</strong> {profile.personalInfo?.motherName || '-'}</p>
-            <p><strong>Religion:</strong> {profile.personalInfo?.religion || '-'}</p>
-            <p><strong>Date of Birth:</strong> {profile.personalInfo?.dateOfBirth || '-'}</p>
-            <p><strong>Place of Birth:</strong> {profile.personalInfo?.placeOfBirth  || '-'}</p>
-            <p><strong>Blood Group:</strong> {profile.personalInfo?.bloodGroup || '-'}</p>
-            {/* <p><strong>Height:</strong> {profile.personalInfo?.height || '-'}</p>
-            <p><strong>Weight:</strong> {profile.personalInfo?.weight || '-'}</p> */}
-            <p><strong>Marital Status:</strong> {profile.personalInfo?.maritalStatus || '-'}</p>
-            <p><strong>Present Address:</strong> {profile.personalInfo?.presentAddress || '-'}</p>
-            <p><strong>Permanent Address:</strong> {profile.personalInfo?.permanentAddress || '-'}</p>
-            <p>
+            <p><strong>Religion:</strong> {bioData?.religion || '-'}</p>
+            <p><strong>Date of Birth:</strong> {bioData?.dateOfBirth || '-'}</p>
+            <p><strong>Place of Birth:</strong> {bioData?.country  || '-'}</p>
+            <p><strong>Blood Group:</strong> {bioData?.bloodGroup || '-'}</p>
+            <p><strong>Height:</strong> {bioData?.height || '-'} Fit</p>
+            <p><strong>Weight:</strong> {bioData?.weight || '-'} KG</p>
+            <p><strong>Marital Status:</strong> {bioData?.maritalStatus || '-'}</p>
+            <p><strong>Present Address:</strong> {bioData?.presentAddress || '-'}</p>
+            <p><strong>Permanent Address:</strong> {bioData?.permanentAddress || '-'}</p>
+            <p><strong>Family Status:</strong> {bioData?.familyStatus || '-'}</p>
+            <p><strong>Family Type:</strong> {bioData?.familyType || '-'}</p>
+            {/* <p>
               <strong>Siblings:</strong>{' '}
               {profile.personalInfo?.siblings
                 ? `${profile.personalInfo.siblings.brothers} Brother(s), ${profile.personalInfo.siblings.sisters} Sister(s)`
                 : '-'}
-            </p>
-            <p><strong>Birth Order:</strong> {profile.personalInfo?.birthOrder || '-'}</p>
+            </p> */}
+            {/* <p><strong>Birth Order:</strong> {profile.personalInfo?.birthOrder || '-'}</p> */}
           </div>
           <div>
             {profile.personalInfo?.currentFamilySetup && (
               <div className="mt-6">
             <h4 className="text-xl font-medium mb-2">
             Current Family Setup
-          </h4>                <p className="text-gray-700 dark:text-gray-300">{profile.personalInfo.currentFamilySetup}</p>
-              </div>
-            )}
-          </div>
-           <div>
-            {profile.personalInfo?.currentFamilySetup && (
-              <div className="mt-6">
-            <h4 className="text-xl font-medium mb-2">
-            Additional Notes
-          </h4>
-          <p className="text-gray-700 dark:text-gray-300">{profile.additionalInfo?.join(', ') || '-'}</p>
+          </h4><p className="text-gray-700 dark:text-gray-300">{bioData?.familyDetails} </p>
               </div>
             )}
           </div>
@@ -205,22 +241,7 @@ export default function BioDataPage() {
             )) || <p>-</p>}
           </ul>
         </motion.section>
-         {/* Hobbies */}
-        <motion.section
-          variants={cardHover}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <h2 className="text-3xl font-semibold border-l-4 border-teal-500 pl-3 mb-6">
-            Hobbies & Interests
-          </h2>
-
-          <p className="text-lg text-gray-700 dark:text-gray-300">
-            {profile.hobbies?.join(', ') || '-'}
-          </p>
-        </motion.section>
-
+        
         {/* Expectations */}
         <motion.section
           variants={cardHover}
@@ -233,13 +254,14 @@ export default function BioDataPage() {
           </h2>
 
           <div className="space-y-2 text-lg text-gray-700 dark:text-gray-300">
-            <p><strong>Preferred Age:</strong> {profile.expectations?.agePreference || '-'}</p>
-            <p><strong>Education:</strong> {profile.expectations?.educationPreference || '-'}</p>
-            <p><strong>Profession:</strong> {profile.expectations?.professionPreference || '-'}</p>
-            <p><strong>Location:</strong> {profile.expectations?.locationPreference || '-'}</p>
-            <p><strong>Willing to Shift Abroad:</strong> {profile.expectations?.willingToShiftAbroad ? 'Yes' : 'No'}</p>
-            <p>{profile.expectations?.bride.toLocaleString() || '-Loyal, modest, down to earth, equal in value and respect.......'}</p>
+            <p><strong>Preferred Age:</strong> {bioData?.preferred_age || '-'}</p>
+            <p><strong>Education:</strong> {bioData?.preferred_education || '-'}</p>
+            <p><strong>Profession:</strong> {bioData?.preferred_profession || '-'}</p>
+            <p><strong>Location:</strong> {bioData?.preferred_location || '-'}</p>
+            <p><strong>Willing to Shift Abroad:</strong> {bioData?.shift_abroad ? 'Yes' : 'No'}</p>
           </div>
+          <p> {bioData?.partnerExpectation}</p>
+
         </motion.section>
 
        
