@@ -92,9 +92,31 @@ export default function FeedPage() {
     
       {/* Main layout */}
       <div className="flex mt-[80px] h-[calc(100vh-80px)]">
-        {/* Left: Suggested Users */}
         <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto bg-gray-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 p-6 space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Suggested Leaf</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Connected Branch</h2>
+          <div className="space-y-4">
+            {usersList.content.map((user) => (
+              <motion.div
+                key={user.id}
+                initial="rest"
+                whileHover="hover"
+                variants={cardHover}
+                className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{user.name}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{user.username}</p>
+                </div>
+                 <Link key={user.id} href={`/${user.id}`}>
+                  <button className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
+                    Send Message
+                  </button>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Suggested Branch</h2>
           <div className="space-y-4">
             {usersList.content.map((user) => (
               <motion.div
@@ -118,6 +140,8 @@ export default function FeedPage() {
             ))}
           </div>
         </div>
+        {/* Left: Suggested Users */}
+       
 
         {/* Middle: Create Post + Feed */}
         <div className="flex-1 max-w-3xl mx-auto overflow-y-auto bg-white dark:bg-gray-950 p-6 space-y-8">
