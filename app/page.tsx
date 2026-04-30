@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getUser } from './data/user';
 import { User, UserList } from './types/auth.types';
+import { Connection, ConnectionList } from './types/connection.types';
+import { getConnection } from './api/connectionApi';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -51,6 +53,7 @@ export default function FeedPage() {
   const profile = myProfile;
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [postContent, setPostContent] = useState('');
+  const [connection, setConnection] = useState<Connection[]| null>(null);
 
   const [usersList, setUser] = useState<UserList>({
     content: [],
@@ -64,7 +67,9 @@ export default function FeedPage() {
         getUser()
           .then(setUser)
           .catch(console.error);
+        getConnections("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2");
       }, []);
+
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
@@ -81,6 +86,17 @@ export default function FeedPage() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  const getConnections =async(id: string) => {
+    try {
+      const response = await getConnection(id);
+      setConnection(response);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
   const handlePost = () => {
     if (!postContent.trim()) return;
     alert(`Posted: ${postContent}`);
@@ -95,9 +111,9 @@ export default function FeedPage() {
         <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto bg-gray-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 p-6 space-y-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Connected Branch</h2>
           <div className="space-y-4">
-            {usersList.content.map((user) => (
+            {connection?.map((con) => (
               <motion.div
-                key={user.id}
+                
                 initial="rest"
                 whileHover="hover"
                 variants={cardHover}
@@ -105,10 +121,10 @@ export default function FeedPage() {
               >
                 {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{user.name}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{user.username}</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.AddressName}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{con.AddressName}</p>
                 </div>
-                 <Link key={user.id} href={`/${user.id}`}>
+                 <Link href={`/${con.id}`}>
                   <button className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
                     Send Message
                   </button>
