@@ -11,3 +11,6 @@ export interface Connection {
 export interface ConnectionResponseList {
     connections:Connection[];
 }
+export interface ConnectionStatus {
+  status: String;
+}
