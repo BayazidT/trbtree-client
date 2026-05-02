@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getUser } from './data/user';
 import { User, UserList } from './types/auth.types';
-import { Connection, ConnectionResponseList } from './types/connection.types';
+import { Connection, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
 import { getConnection } from './api/connectionApi';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
@@ -54,6 +54,9 @@ export default function FeedPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [postContent, setPostContent] = useState('');
   const [connections, setConnections] = useState<Connection[] | null>();
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
+    {status:"PENDING"}
+  );
 
   const [usersList, setUser] = useState<UserList>({
     content: [],
@@ -108,6 +111,9 @@ export default function FeedPage() {
 
   const updateConnection = () => {
     alert("Are you sure you want to update the connection status?");
+    connectionStatus.status="ACCEPTED";
+    // updateConnectionStatus("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", connectionStatus)
+
   }
 
   return (
