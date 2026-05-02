@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { getUser } from './data/user';
 import { User, UserList } from './types/auth.types';
 import { Connection, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
-import { getConnection, updateConnectionStatus } from './api/connectionApi';
+import { getConnection } from './api/connectionApi';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -112,7 +112,7 @@ export default function FeedPage() {
   const updateConnection = () => {
     alert("Are you sure you want to update the connection status?");
     connectionStatus.status="ACCEPTED";
-    updateConnectionStatus
+    // updateConnectionStatus("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", connectionStatus)
 
   }
 
