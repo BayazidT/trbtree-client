@@ -136,13 +136,9 @@ export default function FeedPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.requesterName}</h3>
                 </div>
-                 
                   <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
                     {con.status== "PENDING" ? "Accept" : "Reject"}
-                    
                   </button>
-                  
-                
               </motion.div>
             ))}
           </div>
@@ -241,7 +237,7 @@ export default function FeedPage() {
         <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto bg-gray-50 dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800 p-6 space-y-10">
           {/* Latest Chats */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Latest Chats</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Conversations</h2>
             <div className="space-y-3">
               {latestChats.map((chat) => (
                 <motion.div
