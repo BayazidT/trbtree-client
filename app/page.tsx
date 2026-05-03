@@ -9,7 +9,9 @@ import { motion } from 'framer-motion';
 import { getUser } from './data/user';
 import { User, UserList } from './types/auth.types';
 import { Connection, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
+import { Conversation, ConversationList } from './types/conversation.types';
 import { getConnection,updateConnectionStatus } from './api/connectionApi';
+import { getConversation } from './api/conversationApi';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -54,6 +56,7 @@ export default function FeedPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [postContent, setPostContent] = useState('');
   const [connections, setConnections] = useState<Connection[] | null>();
+  const [conversations, setConversations ] =  useState<Conversation[] | null>();
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     {status:"PENDING"}
   );
@@ -73,6 +76,7 @@ export default function FeedPage() {
   }, []);
   useEffect(()=>{
         getConnections("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2");
+        getConversations("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2")
         console.log(connections);
   }, []);
 
@@ -100,7 +104,14 @@ export default function FeedPage() {
     } catch (error) {
       console.log(error);
     }
-
+  }
+  const getConversations = async(id: String) =>{
+    try {
+      const response = await getConversation(id);
+      setConversations(response);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handlePost = () => {
@@ -136,13 +147,9 @@ export default function FeedPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.requesterName}</h3>
                 </div>
-                 
                   <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
                     {con.status== "PENDING" ? "Accept" : "Reject"}
-                    
                   </button>
-                  
-                
               </motion.div>
             ))}
           </div>
@@ -241,29 +248,29 @@ export default function FeedPage() {
         <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto bg-gray-50 dark:bg-gray-950 border-l border-gray-200 dark:border-gray-800 p-6 space-y-10">
           {/* Latest Chats */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Latest Chats</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Conversations</h2>
             <div className="space-y-3">
-              {latestChats.map((chat) => (
+              {conversations?.map((chat) => (
                 <motion.div
-                  key={chat.id}
+                  key={1}
                   initial="rest"
                   whileHover="hover"
                   variants={cardHover}
                   className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer shadow-sm"
                 >
-                  <div className="relative">
+                  {/* <div className="relative">
                     <Image src={chat.user.profilePic} alt={chat.user.name} width={52} height={52} className="rounded-full" />
                     {chat.unread > 0 && (
                       <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
                         {chat.unread}
                       </span>
                     )}
-                  </div>
+                  </div> */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">{chat.user.name}</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">{chat.otherUsername}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{chat.lastMessage}</p>
                   </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{chat.time}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{chat.unreadCount}</span>
                 </motion.div>
               ))}
             </div>
