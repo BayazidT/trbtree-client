@@ -1,6 +1,6 @@
 export async function fetchAPI<T>(
   url: string,
-  options?: RequestInit & { body?: any }
+  options?: Omit<RequestInit, "body"> & { body?: unknown }
 ): Promise<T> {
   const { body, headers, method = "GET", ...rest } = options || {};
 
@@ -20,7 +20,6 @@ export async function fetchAPI<T>(
   });
 
   if (!res.ok) {
-    // optional: better error handling
     const errorText = await res.text();
     throw new Error(`API Error: ${res.status} - ${errorText}`);
   }

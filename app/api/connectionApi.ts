@@ -5,12 +5,12 @@ export const getConnection = async(id: String): Promise<ConnectionResponseList> 
   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/connection/receive/${id}`);
 };
 
-// export const updateConnectionStatus = async (
-//   id: string,
-//   connectionStatus: ConnectionStatus
-// ): Promise<ConnectionResponseList> => {
-//   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/connection/${id}`, {
-//       method: "PUT",
-//       body: connectionStatus }
-//   );
-// };
+export const updateConnectionStatus = async (
+  id: String,
+  connectionStatus: ConnectionStatus
+): Promise<ConnectionResponseList> => {
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/connection/${id}`, {
+      method: "PUT",
+      body: { status: connectionStatus.status }
+    });
+};

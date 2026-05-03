@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { getUser } from './data/user';
 import { User, UserList } from './types/auth.types';
 import { Connection, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
-import { getConnection } from './api/connectionApi';
+import { getConnection,updateConnectionStatus } from './api/connectionApi';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -109,10 +109,10 @@ export default function FeedPage() {
     setPostContent('');
   };
 
-  const updateConnection = () => {
+  const updateConnection = (id: String) => {
     alert("Are you sure you want to update the connection status?");
     connectionStatus.status="ACCEPTED";
-    // updateConnectionStatus("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", connectionStatus)
+    updateConnectionStatus(id, connectionStatus)
 
   }
 
@@ -137,9 +137,11 @@ export default function FeedPage() {
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.requesterName}</h3>
                 </div>
                  
-                  <button onClick={updateConnection} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
-                    {con.status== "PENDING" ? "Confirm" : "Reject"}
+                  <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
+                    {con.status== "PENDING" ? "Accept" : "Reject"}
+                    
                   </button>
+                  
                 
               </motion.div>
             ))}
