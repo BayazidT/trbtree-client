@@ -177,7 +177,6 @@ export default function FeedPage() {
             ))}
           </div>
         </div>
-        {/* Left: Suggested Users */}
        
 
         {/* Middle: Create Post + Feed */}
