@@ -12,6 +12,8 @@ import { Connection, ConnectionResponseList, ConnectionStatus } from './types/co
 import { Conversation, ConversationList } from './types/conversation.types';
 import { getConnection,updateConnectionStatus } from './api/connectionApi';
 import { getConversation } from './api/conversationApi';
+import { getPosts } from './api/postApi';
+import { PostListResponse } from './types/post.types';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -57,6 +59,7 @@ export default function FeedPage() {
   const [postContent, setPostContent] = useState('');
   const [connections, setConnections] = useState<Connection[] | null>();
   const [conversations, setConversations ] =  useState<Conversation[] | null>();
+  const [post, setPost] = useState<PostListResponse | null> ();
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     {status:"PENDING"}
   );
@@ -77,8 +80,9 @@ export default function FeedPage() {
   useEffect(()=>{
         getConnections("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2");
         getConversations("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2")
-        console.log(connections);
-  }, []);
+        getPost('60c8523c-23c7-4b7b-8a54-a9a2e69da5c4');
+      
+      }, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
@@ -99,8 +103,6 @@ export default function FeedPage() {
     try {
       const response = await getConnection(id);
       setConnections(response.connections);
-      console.log(response);
-      console.log(connections);
     } catch (error) {
       console.log(error);
     }
@@ -125,6 +127,15 @@ export default function FeedPage() {
     connectionStatus.status="ACCEPTED";
     updateConnectionStatus(id, connectionStatus)
 
+  }
+
+  const getPost = async(id: String) =>{
+    try {
+      const respone = await getPosts(id);
+      setPost(respone);
+    } catch (error) {
+      
+    }
   }
 
   return (
@@ -218,25 +229,25 @@ export default function FeedPage() {
 
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Latest Posts</h2>
           <div className="space-y-6">
-            {posts.map((post) => (
+            {post?.content?.map((post) => (
               <motion.div
-                key={post.id}
+                key={1}
                 initial="rest"
                 whileHover="hover"
                 variants={cardHover}
                 className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-shadow"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <Image src={post.user.profilePic} alt={post.user.name} width={48} height={48} className="rounded-full" />
+                  {/* <Image src={post.name} alt={post.user.name} width={48} height={48} className="rounded-full" /> */}
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{post.user.name}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">@{post.user.username} · {post.date}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{post.name}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">@{post.name} · {post.createdAt}</p>
                   </div>
                 </div>
                 <p className="text-gray-800 dark:text-gray-200 mb-4 leading-relaxed">{post.content}</p>
                 <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
-                  <span>❤️ {post.likes}</span>
-                  <span>💬 {post.comments}</span>
+                  <span>❤️ {post.likeCount}</span>
+                  <span>💬 {post.commentCount}</span>
                 </div>
               </motion.div>
             ))}
