@@ -14,3 +14,7 @@ export interface ConnectionResponseList {
 export interface ConnectionStatus {
   status: String;
 }
+
+export interface ConnectionRequest{
+  addresseeId: String
+}

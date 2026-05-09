@@ -8,9 +8,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getUser } from './data/user';
 import { User, UserList } from './types/auth.types';
-import { Connection, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
+import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
 import { Conversation, ConversationList } from './types/conversation.types';
-import { getConnection,updateConnectionStatus } from './api/connectionApi';
+import { getConnection,updateConnectionStatus, sendConnectionRequest } from './api/connectionApi';
 import { getConversation } from './api/conversationApi';
 import { getPosts, createPost } from './api/postApi';
 import { PostListResponse, PostResponse } from './types/post.types';
@@ -62,6 +62,11 @@ export default function FeedPage() {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     {status:"PENDING"}
   );
+  const [connectionRequest, setConnectionRequest] = useState<ConnectionRequest>(
+    {
+      addresseeId:""
+    }
+  )
 
   const [usersList, setUser] = useState<UserList>({
     content: [],
@@ -143,6 +148,10 @@ export default function FeedPage() {
       
     }
   }
+  const sendFriendRequest = async(id: String) =>{
+    await sendConnectionRequest("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", id);
+
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -162,7 +171,28 @@ export default function FeedPage() {
               >
                 {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.requesterName}</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
+                </div>
+                  <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
+                    {con.status== "PENDING" ? "Accept" : "Reject"}
+                  </button>
+              </motion.div>
+            ))}
+          </div>
+          {/* Connected branches */}
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Branches</h2>
+          <div className="space-y-4">
+            {connections?.map((con) => (
+              <motion.div
+                key={crypto.randomUUID()}
+                initial="rest"
+                whileHover="hover"
+                variants={cardHover}
+                className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
                 </div>
                   <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
                     {con.status== "PENDING" ? "Accept" : "Reject"}
@@ -182,14 +212,15 @@ export default function FeedPage() {
               >
                 {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
                 <div className="flex-1 min-w-0">
+                 <Link key={user.id} href={`/${user.id}`}>
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{user.name}</h3>
+                  </Link>
                   <p className="text-sm text-gray-600 dark:text-gray-400">{user.username}</p>
                 </div>
-                 <Link key={user.id} href={`/${user.id}`}>
-                  <button className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
-                    Follow
+                 
+                  <button onClick={() => sendFriendRequest(user.id)} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
+                    Add Branch
                   </button>
-                </Link>
               </motion.div>
             ))}
           </div>
