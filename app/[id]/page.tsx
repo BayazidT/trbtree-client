@@ -60,20 +60,19 @@ export default function ProfilePage() {
 
   useEffect(() => {   
     if (!id || Array.isArray(id)) return;
-    getUserDetails(id).then(setUser);
+    getUserDetails(id);
     getUserProfile(id).then(setUserProfile);
   }, [id]);
 
   useEffect(() =>{
     if (!id || Array.isArray(id)) return;
-    getUserResume(id).then(setResumeData);
+    getUserResume(id);
   },[id]);
 
   const getUserDetails = async (id: string) => {
     try {
       const user = await getUserById(id);
-      
-      return user;
+      setUser(user);
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
@@ -91,7 +90,7 @@ export default function ProfilePage() {
   const getUserResume = async (id: string) =>{
     try {
       const resume = await getResumeUserById(id);
-      return resume;
+      setResumeData(resume);
     } catch (error) {
         console.error('Error fetching user resume:', error);
     }
@@ -139,7 +138,7 @@ export default function ProfilePage() {
               whileTap={{ scale: 0.96 }}
               className="px-10 py-5 bg-teal-600 hover:bg-teal-700 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              Contact Me
+              Send Message
             </motion.a>
 
             {profile.contact.linkedin && (
