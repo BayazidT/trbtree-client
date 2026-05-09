@@ -1,6 +1,13 @@
 import { fetchAPI } from "../lib/api";
-import { PostListResponse } from "../types/post.types";
+import { PostListResponse, PostResponse } from "../types/post.types";
 
 export const getPosts = async(id: String): Promise<PostListResponse> => {
   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/post/${id}`);
 };
+
+export const createPost = async(post: PostResponse, id: string) => {
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/post/${id}`, {
+    method: "POST",
+    body: post
+  });
+}
