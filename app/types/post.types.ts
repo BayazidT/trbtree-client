@@ -1,8 +1,8 @@
 export interface PostResponse{
     id: String,
-    name: String,
-    content: String,
-    visiblity: String,
+    name?: String,
+    content?: String,
+    visibility?: String,
     likeCount?: number,
     commentCount?: number,
     createdAt?: String,

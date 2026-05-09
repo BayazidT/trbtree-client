@@ -12,8 +12,9 @@ import { Connection, ConnectionResponseList, ConnectionStatus } from './types/co
 import { Conversation, ConversationList } from './types/conversation.types';
 import { getConnection,updateConnectionStatus } from './api/connectionApi';
 import { getConversation } from './api/conversationApi';
-import { getPosts } from './api/postApi';
-import { PostListResponse } from './types/post.types';
+import { getPosts, createPost } from './api/postApi';
+import { PostListResponse, PostResponse } from './types/post.types';
+import { create } from 'domain';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -26,13 +27,6 @@ const users = [
   { id: 3, name: 'Alice Johnson', username: 'alicej', profilePic: '/placeholder.svg?height=40&width=40' },
   { id: 4, name: 'Bob Brown', username: 'bobbrown', profilePic: '/placeholder.svg?height=40&width=40' },
   { id: 5, name: 'Eve Davis', username: 'evedavis', profilePic: '/placeholder.svg?height=40&width=40' },
-];
-
-const posts = [
-  { id: 1, user: users[0], content: 'Excited to share my latest project on AI ethics! #AI #Tech', date: '2026-02-15', likes: 42, comments: 8 },
-  { id: 2, user: users[1], content: 'Just finished a new UI design for a mobile app. Feedback welcome!', date: '2026-02-14', likes: 56, comments: 12 },
-  { id: 3, user: users[2], content: 'Discussing product roadmaps in today’s meeting. Lots of great ideas.', date: '2026-02-13', likes: 31, comments: 5 },
-  { id: 4, user: users[3], content: 'Optimizing CI/CD pipelines for faster deployments. #DevOps', date: '2026-02-12', likes: 27, comments: 3 },
 ];
 
 const events = [
@@ -59,7 +53,12 @@ export default function FeedPage() {
   const [postContent, setPostContent] = useState('');
   const [connections, setConnections] = useState<Connection[] | null>();
   const [conversations, setConversations ] =  useState<Conversation[] | null>();
-  const [post, setPost] = useState<PostListResponse | null> ();
+  const [posts, setPosts] = useState<PostListResponse | null> ();
+  const [post, setPost] = useState<PostResponse>({
+    id: "",
+    content: "",
+    visibility: "PUBLIC",  
+  });
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     {status:"PENDING"}
   );
@@ -116,10 +115,17 @@ export default function FeedPage() {
     }
   }
 
-  const handlePost = () => {
-    if (!postContent.trim()) return;
-    alert(`Posted: ${postContent}`);
-    setPostContent('');
+  const handlePost = async(post: PostResponse) => {
+    try {
+      await createPost(post, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4");
+      setPost({
+          id: "",
+      content: "",
+      visibility: "PUBLIC",
+    });
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
   };
 
   const updateConnection = (id: String) => {
@@ -132,7 +138,7 @@ export default function FeedPage() {
   const getPost = async(id: String) =>{
     try {
       const respone = await getPosts(id);
-      setPost(respone);
+      setPosts(respone);
     } catch (error) {
       
     }
@@ -148,7 +154,7 @@ export default function FeedPage() {
           <div className="space-y-4">
             {connections?.map((con) => (
               <motion.div
-                key={1}
+                key={crypto.randomUUID()}
                 initial="rest"
                 whileHover="hover"
                 variants={cardHover}
@@ -208,16 +214,15 @@ export default function FeedPage() {
               />
               <div className="flex-1">
                 <textarea
-                  value={postContent}
-                  onChange={(e) => setPostContent(e.target.value)}
+                  // value={post}
+                  onChange={(e) => setPost({ ...post, content: e.target.value })}
                   placeholder="What's on your mind?"
                   className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[90px]"
                   rows={3}
                 />
                 <div className="flex justify-end mt-4">
                   <button
-                    onClick={handlePost}
-                    disabled={!postContent.trim()}
+                    onClick={() => handlePost( { ...post, content: post.content })}
                     className="px-8 py-3 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none"
                   >
                     Post
@@ -229,9 +234,9 @@ export default function FeedPage() {
 
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Latest Posts</h2>
           <div className="space-y-6">
-            {post?.content?.map((post) => (
+            {posts?.content?.map((post) => (
               <motion.div
-                key={1}
+                key={crypto.randomUUID()}
                 initial="rest"
                 whileHover="hover"
                 variants={cardHover}
