@@ -201,9 +201,16 @@ export default function FeedPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
                 </div>
-                  <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
+                  <Link href={con.status== "ACCEPTED" ? `/${con.id}` : "#"} onClick={(e) => {
+                    if(con.status != "ACCEPTED"){
+                      e.preventDefault();
+                      alert("You need to be connected to send a message");
+                    }
+                  }} className="shrink-0">
+                  <p className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
                     {con.status== "ACCEPTED" ? "Send Message" : "Follow"}
-                  </button>
+                  </p>
+                  </Link>
               </motion.div>
             ))}
           </div>
