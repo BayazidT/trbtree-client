@@ -4,6 +4,9 @@ import { Connection, ConnectionResponseList, ConnectionStatus } from '../types/c
 export const getConnectionRequestReceive = async(id: String): Promise<ConnectionResponseList> => {
   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/connection/receive/${id}`);
 };
+export const getConnectionRequestSend = async(id: String): Promise<ConnectionResponseList> => {
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/connection/sent/${id}`);
+};
 
 
 export const getConnection = async(id: String): Promise<ConnectionResponseList> => {
