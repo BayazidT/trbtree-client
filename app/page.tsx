@@ -181,7 +181,7 @@ export default function FeedPage() {
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
                 </div>
                   <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
-                    {con.status== "PENDING" ? "Accept" : "Reject"}
+                    Confirm
                   </button>
               </motion.div>
             ))}
@@ -202,7 +202,7 @@ export default function FeedPage() {
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
                 </div>
                   <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
-                    {con.status== "PENDING" ? "Accept" : "Reject"}
+                    {con.status== "ACCEPTED" ? "Send Message" : "Follow"}
                   </button>
               </motion.div>
             ))}
