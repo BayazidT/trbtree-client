@@ -10,11 +10,12 @@ import { getUser } from './data/user';
 import { User, UserList } from './types/auth.types';
 import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
 import { Conversation, ConversationList } from './types/conversation.types';
-import { getConnection,updateConnectionStatus, sendConnectionRequest } from './api/connectionApi';
+import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from './api/connectionApi';
 import { getConversation } from './api/conversationApi';
 import { getPosts, createPost } from './api/postApi';
 import { PostListResponse, PostResponse } from './types/post.types';
 import { create } from 'domain';
+import { get } from 'http';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -52,6 +53,8 @@ export default function FeedPage() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [postContent, setPostContent] = useState('');
   const [connections, setConnections] = useState<Connection[] | null>();
+  const [connectionsSent, setConnectionsSent] = useState<Connection[] | null>();
+  const [connectionsReceived, setConnectionsReceived] = useState<Connection[] | null>();
   const [conversations, setConversations ] =  useState<Conversation[] | null>();
   const [posts, setPosts] = useState<PostListResponse | null> ();
   const [post, setPost] = useState<PostResponse>({
@@ -106,6 +109,10 @@ export default function FeedPage() {
   const getConnections =async(id: string) => {
     try {
       const response = await getConnection(id);
+      const conReceived = await getConnectionRequestReceive(id);
+      const conSent = await getConnectionRequestSend(id);
+      setConnectionsReceived(conReceived.connections);
+      setConnectionsSent(conSent.connections);
       setConnections(response.connections);
     } catch (error) {
       console.log(error);
@@ -161,7 +168,7 @@ export default function FeedPage() {
         <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto bg-gray-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 p-6 space-y-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Branch Request</h2>
           <div className="space-y-4">
-            {connections?.map((con) => (
+            {connectionsReceived?.map((con) => (
               <motion.div
                 key={crypto.randomUUID()}
                 initial="rest"
