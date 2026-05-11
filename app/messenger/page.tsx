@@ -6,14 +6,14 @@ import { myProfile } from '@/app/data/profile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getUser } from './data/user';
-import { User, UserList } from './types/auth.types';
-import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
-import { Conversation, ConversationList } from './types/conversation.types';
-import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from './api/connectionApi';
-import { getConversation } from './api/conversationApi';
-import { getPosts, createPost } from './api/postApi';
-import { PostListResponse, PostResponse } from './types/post.types';
+import { getUser } from '../data/user';
+import { User, UserList } from '../types/auth.types';
+import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from '../types/connection.types';
+import { Conversation, ConversationList } from '../types/conversation.types';
+import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from '../api/connectionApi';
+import { getConversation } from '../api/conversationApi';
+import { getPosts, createPost } from '../api/postApi';
+import { PostListResponse, PostResponse } from '../types/post.types';
 import { create } from 'domain';
 import { get } from 'http';
 const cardHover = {
@@ -166,28 +166,9 @@ export default function FeedPage() {
       {/* Main layout */}
       <div className="flex mt-[80px] h-[calc(100vh-80px)]">
         <div className="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 overflow-y-auto bg-gray-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 p-6 space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Branch Request</h2>
-          <div className="space-y-4">
-            {connectionsReceived?.map((con) => (
-              <motion.div
-                key={crypto.randomUUID()}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
-                </div>
-                  <button onClick={() =>updateConnection(con.id)} className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
-                    Confirm
-                  </button>
-              </motion.div>
-            ))}
-          </div>
+         
           {/* Connected branches */}
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Branches</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Conversations</h2>
           <div className="space-y-4">
             {connections?.map((con) => (
               <motion.div
@@ -214,33 +195,7 @@ export default function FeedPage() {
               </motion.div>
             ))}
           </div>
-           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Suggested Branch</h2>
-          <div className="space-y-4">
-            {usersList.content.map((user) => (
-              <motion.div
-                key={user.id}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
-                <div className="flex-1 min-w-0">
-                 <Link key={user.id} href={`/${user.id}`}>
-                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{user.name}</h3>
-                  </Link>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{user.username}</p>
-                </div>
-                 
-                  <button onClick={() => sendFriendRequest(user.id)} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
-                    Add Branch
-                  </button>
-              </motion.div>
-            ))}
-          </div>
         </div>
-       
-
         {/* Middle: Create Post + Feed */}
         <div className="flex-1 max-w-3xl mx-auto overflow-y-auto bg-white dark:bg-gray-950 p-6 space-y-8">
           {/* Create Post */}
@@ -250,19 +205,12 @@ export default function FeedPage() {
             className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md"
           >
             <div className="flex items-start gap-4">
-              <Image
-                src={profile.profilePic}
-                alt="You"
-                width={52}
-                height={52}
-                className="rounded-full ring-2 ring-teal-500/30"
-              />
               <div className="flex-1">
                 <textarea
                   // value={post}
                   onChange={(e) => setPost({ ...post, content: e.target.value })}
                   placeholder="What's on your mind?"
-                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[90px]"
+                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[380px]"
                   rows={3}
                 />
                 <div className="flex justify-end mt-4">
@@ -277,31 +225,7 @@ export default function FeedPage() {
             </div>
           </motion.div>
 
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Latest Posts</h2>
-          <div className="space-y-6">
-            {posts?.content?.map((post) => (
-              <motion.div
-                key={crypto.randomUUID()}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-shadow"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  {/* <Image src={post.name} alt={post.user.name} width={48} height={48} className="rounded-full" /> */}
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{post.name}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">@{post.name} · {post.createdAt}</p>
-                  </div>
-                </div>
-                <p className="text-gray-800 dark:text-gray-200 mb-4 leading-relaxed">{post.content}</p>
-                <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
-                  <span>❤️ {post.likeCount}</span>
-                  <span>💬 {post.commentCount}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          
         </div>
 
         {/* Right: Chats + Events + Updates */}
