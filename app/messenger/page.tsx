@@ -87,7 +87,6 @@ export default function FeedPage() {
   useEffect(()=>{
         getConnections("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2");
         getConversations("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2")
-        getPost('60c8523c-23c7-4b7b-8a54-a9a2e69da5c4');
       
       }, []);
 
@@ -127,7 +126,7 @@ export default function FeedPage() {
     }
   }
 
-  const handlePost = async(post: PostResponse) => {
+  const handleSendMessage = async(post: PostResponse) => {
     try {
       await createPost(post, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4");
       setPost({
@@ -140,26 +139,7 @@ export default function FeedPage() {
     }
   };
 
-  const updateConnection = (id: String) => {
-    alert("Are you sure you want to update the connection status?");
-    connectionStatus.status="ACCEPTED";
-    updateConnectionStatus(id, connectionStatus)
-
-  }
-
-  const getPost = async(id: String) =>{
-    try {
-      const respone = await getPosts(id);
-      setPosts(respone);
-    } catch (error) {
-      
-    }
-  }
-  const sendFriendRequest = async(id: String) =>{
-    await sendConnectionRequest("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", id);
-
-  }
-
+  
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
     
@@ -169,32 +149,31 @@ export default function FeedPage() {
          
           {/* Connected branches */}
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Conversations</h2>
-          <div className="space-y-4">
-            {connections?.map((con) => (
-              <motion.div
-                key={crypto.randomUUID()}
-                initial="rest"
-                whileHover="hover"
-                variants={cardHover}
-                className="bg-white dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                {/* <Image src="https://scontent-dus1-1.xx.fbcdn.net/v/t39.30808-6/659767570_27421711750764927_8167623756091965747_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=109&ccb=1-7&_nc_sid=dd6889&_nc_ohc=NDDy00cfWGAQ7kNvwHNws0p&_nc_oc=AdpBr2rBRCifV_lRn5hplcU_HeYv5btaVXzqKCMhezMn2s5MjrtF8kCghb4CcA4vfos&_nc_zt=23&_nc_ht=scontent-dus1-1.xx&_nc_gid=kppVDad1GmLixX7JRcv35A&_nc_ss=7a3a8&oh=00_AfyagFZBZ4AGuBOCFooNEM5iNT9G6_NqgTsXVyNeqgbnfA&oe=69D0B0BA" alt='test' width={48} height={48} className="rounded-full" /> */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
-                </div>
-                  <Link href={con.status== "ACCEPTED" ? `/${con.id}` : "#"} onClick={(e) => {
-                    if(con.status != "ACCEPTED"){
-                      e.preventDefault();
-                      alert("You need to be connected to send a message");
-                    }
-                  }} className="shrink-0">
-                  <p className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
-                    {con.status== "ACCEPTED" ? "Send Message" : "Follow"}
-                  </p>
-                  </Link>
-              </motion.div>
-            ))}
-          </div>
+            <div className="space-y-3">
+              {conversations?.map((chat) => (
+                <motion.div
+                  key={1}
+                  initial="rest"
+                  whileHover="hover"
+                  variants={cardHover}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer shadow-sm"
+                >
+                  {/* <div className="relative">
+                    <Image src={chat.user.profilePic} alt={chat.user.name} width={52} height={52} className="rounded-full" />
+                    {chat.unread > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                        {chat.unread}
+                      </span>
+                    )}
+                  </div> */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-900 dark:text-white truncate">{chat.otherUsername}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{chat.lastMessage}</p>
+                  </div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{chat.unreadCount}</span>
+                </motion.div>
+              ))}
+            </div>
         </div>
         {/* Middle: Create Post + Feed */}
         <div className="flex-1 max-w-3xl mx-auto overflow-y-auto bg-white dark:bg-gray-950 p-6 space-y-8">
@@ -210,15 +189,15 @@ export default function FeedPage() {
                   // value={post}
                   onChange={(e) => setPost({ ...post, content: e.target.value })}
                   placeholder="What's on your mind?"
-                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[380px]"
+                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[330px]"
                   rows={3}
                 />
                 <div className="flex justify-end mt-4">
                   <button
-                    onClick={() => handlePost( { ...post, content: post.content })}
+                    onClick={() => handleSendMessage( { ...post, content: post.content })}
                     className="px-8 py-3 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none"
                   >
-                    Post
+                    Send
                   </button>
                 </div>
               </div>
