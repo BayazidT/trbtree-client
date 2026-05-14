@@ -16,6 +16,8 @@ import { getPosts, createPost } from '../api/postApi';
 import { PostListResponse, PostResponse } from '../types/post.types';
 import { create } from 'domain';
 import { get } from 'http';
+import { Message } from '../types/message.types';
+import { sendMessage } from '../api/messengerApi';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -57,10 +59,10 @@ export default function FeedPage() {
   const [connectionsReceived, setConnectionsReceived] = useState<Connection[] | null>();
   const [conversations, setConversations ] =  useState<Conversation[] | null>();
   const [posts, setPosts] = useState<PostListResponse | null> ();
-  const [post, setPost] = useState<PostResponse>({
-    id: "",
+  const [message, setMessage] = useState<Message>({
+    conversationId: "",
+    receiverId: "",
     content: "",
-    visibility: "PUBLIC",  
   });
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     {status:"PENDING"}
@@ -126,14 +128,14 @@ export default function FeedPage() {
     }
   }
 
-  const handleSendMessage = async(post: PostResponse) => {
+  const handleSendMessage = async(message: Message) => {
     try {
-      await createPost(post, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4");
-      setPost({
-          id: "",
-      content: "",
-      visibility: "PUBLIC",
-    });
+      await sendMessage(message, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4");
+      setMessage({
+        conversationId: "",
+        receiverId: "",
+        content: "",
+      });
     } catch (error) {
       console.error("Error creating post:", error);
     }
@@ -183,25 +185,61 @@ export default function FeedPage() {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-md"
           >
-            <div className="flex items-start gap-4">
-              <div className="flex-1">
-                <textarea
-                  // value={post}
-                  onChange={(e) => setPost({ ...post, content: e.target.value })}
-                  placeholder="What's on your mind?"
-                  className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[330px]"
-                  rows={3}
-                />
-                <div className="flex justify-end mt-4">
-                  <button
-                    onClick={() => handleSendMessage( { ...post, content: post.content })}
-                    className="px-8 py-3 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none"
-                  >
-                    Send
-                  </button>
+            <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+  {/* Chat Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              
+              {/* Receiver Message */}
+              <div className="flex justify-start">
+                <div className="max-w-xs md:max-w-md px-4 py-3 rounded-2xl rounded-bl-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow">
+                  Hey! How are you doing?
+                </div>
+              </div>
+
+              {/* Sender Message */}
+              <div className="flex justify-end">
+                <div className="max-w-xs md:max-w-md px-4 py-3 rounded-2xl rounded-br-sm bg-teal-600 text-white shadow">
+                  I'm doing great! Working on the messenger UI 😄
+                </div>
+              </div>
+
+              {/* More Messages Example */}
+              <div className="flex justify-start">
+                <div className="max-w-xs md:max-w-md px-4 py-3 rounded-2xl rounded-bl-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow">
+                  Nice! It already looks good.
                 </div>
               </div>
             </div>
+
+            {/* Message Input */}
+            <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+              <div className="flex items-end gap-3">
+                
+                <textarea
+                  value={message.content}
+                  onChange={(e) =>
+                    setMessage({ ...message, content: e.target.value })
+                  }
+                  placeholder="Type a message..."
+                  rows={1}
+                  className="flex-1 resize-none rounded-2xl px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
+
+                <button
+                  onClick={() =>
+                    handleSendMessage({
+                      ...message,
+                      content: message.content, conversationId:"fe849066-2cfa-4db0-9dac-59806cc5a4de",
+                      receiverId: "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4"
+                    })
+                  }
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-full transition-all shadow-md"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
           </motion.div>
 
           
