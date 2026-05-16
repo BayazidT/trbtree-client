@@ -1,9 +1,9 @@
 export interface Conversation{
-    conversationId: String,
-    type?: String,
-    otherUserId: String,
-    otherUsername: String,
-    lastMessage?: String,
+    conversationId: string,
+    type?: string,
+    otherUserId: string,
+    otherUsername: string,
+    lastMessage?: string,
     unreadCount?: number
 }
 export interface ConversationList{
