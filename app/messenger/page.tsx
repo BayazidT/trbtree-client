@@ -17,7 +17,7 @@ import { PostListResponse, PostResponse } from '../types/post.types';
 import { create } from 'domain';
 import { get } from 'http';
 import { Message } from '../types/message.types';
-import { sendMessage } from '../api/messengerApi';
+import { sendMessage, getMessages } from '../api/messengerApi';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -89,6 +89,7 @@ export default function FeedPage() {
   useEffect(()=>{
         getConnections("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2");
         getConversations("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2")
+        getMessageList("fe849066-2cfa-4db0-9dac-59806cc5a4de");
       
       }, []);
 
@@ -123,6 +124,14 @@ export default function FeedPage() {
     try {
       const response = await getConversation(id);
       setConversations(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getMessageList = async(id: string) =>{
+    try {
+      const response = await getMessages(id);
     } catch (error) {
       console.log(error);
     }
@@ -168,11 +177,13 @@ export default function FeedPage() {
                       </span>
                     )}
                   </div> */}
+                  <button onClick={() => {}} className="flex-1 min-w-0"> 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 dark:text-white truncate">{chat.otherUsername}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{chat.lastMessage}</p>
                   </div>
                   <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{chat.unreadCount}</span>
+                  </button>
                 </motion.div>
               ))}
             </div>

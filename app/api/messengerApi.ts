@@ -10,3 +10,7 @@ export const sendMessage = async (message: Message, userId: string) => {
     body: message
   }); 
 }
+
+export const getMessages = async (userId: string ): Promise<Message[]> =>{
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/message/${userId}`);
+}
