@@ -23,6 +23,7 @@ import { getConversation } from '../api/conversationApi';
 import { Message } from '../types/message.types';
 
 import { sendMessage, getMessages } from '../api/messengerApi';
+import { useParams, useSearchParams } from 'next/navigation';
 
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
@@ -52,6 +53,9 @@ const updates = [
 
 export default function FeedPage() {
   const profile = myProfile;
+  const searchP = useSearchParams();
+  const conversationId = searchP.get("id");
+
 
   const currentUserId = '0bcf6705-be5b-477b-aa44-b8c05e8d6ff2';
 
@@ -93,6 +97,7 @@ export default function FeedPage() {
   useEffect(() => {
     getConnections(currentUserId);
     getConversations(currentUserId);
+    getInitialConversation();
   }, []);
 
   useEffect(() => {
@@ -170,6 +175,22 @@ export default function FeedPage() {
 
     await getMessageList(chat?.conversationId);
   };
+
+  const getInitialConversation = async () =>{
+    if(conversationId != null){
+      const conversation = await getConversation(conversationId);
+    setSelectedConversation(conversation[0]);
+
+    setMessage({
+      conversationId: conversationId,
+      receiverId: "",
+      content: '',
+    });
+
+    await getMessageList(conversationId);
+  }
+  }
+
 
   const handleSendMessage = async (
     message: Message
