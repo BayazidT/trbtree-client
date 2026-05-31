@@ -57,7 +57,7 @@ export default function FeedPage() {
   const conversationId = searchP.get("id");
 
 
-  const currentUserId = '0bcf6705-be5b-477b-aa44-b8c05e8d6ff2';
+  const currentUserId = '60c8523c-23c7-4b7b-8a54-a9a2e69da5c4';
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
