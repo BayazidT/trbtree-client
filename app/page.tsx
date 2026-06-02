@@ -157,8 +157,9 @@ export default function FeedPage() {
   }
   const handleConversation = async (perticipantId: String) => {
     // const response = await getConversation();
-    await createConversation("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
+    // await createConversation("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
     
+
 
 
   }
@@ -208,12 +209,11 @@ export default function FeedPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
                 </div>
-                  <button onClick={(e) => {handleConversation(con?.addresseId)}
-                  }className="shrink-0">
+                  <a href='/messenger' className="shrink-0">
                   <p className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
                     {con.status== "ACCEPTED" ? "Send Message" : "Follow"}
                   </p>
-                  </button>
+                  </a>
               </motion.div>
             ))}
           </div>
