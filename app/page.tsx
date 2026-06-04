@@ -2,6 +2,8 @@
 
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { myProfile } from '@/app/data/profile';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,7 +13,7 @@ import { User, UserList } from './types/auth.types';
 import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
 import { Conversation, ConversationList } from './types/conversation.types';
 import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from './api/connectionApi';
-import { createConversation, getConversation } from './api/conversationApi';
+import { createConversation, getConversation, getIfConversationExist } from './api/conversationApi';
 import { getPosts, createPost } from './api/postApi';
 import { PostListResponse, PostResponse } from './types/post.types';
 import { create } from 'domain';
@@ -50,6 +52,7 @@ const latestChats = [
 
 export default function FeedPage() {
   const profile = myProfile;
+  const router = useRouter();
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [postContent, setPostContent] = useState('');
   const [connections, setConnections] = useState<Connection[] | null>();
@@ -156,10 +159,13 @@ export default function FeedPage() {
     }
   }
   const handleConversation = async (perticipantId: String) => {
-    // const response = await getConversation();
-    // await createConversation("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
-    
+    const response = await getIfConversationExist("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
 
+    if(!response){
+    await createConversation("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
+    }    
+
+      router.push('/messenger');
 
 
   }
@@ -209,11 +215,11 @@ export default function FeedPage() {
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">{con.addresseeName}</h3>
                 </div>
-                  <a href='/messenger' className="shrink-0">
+                  <button onClick={() => handleConversation(con.id)} className="shrink-0">
                   <p className="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-full text-sm font-medium transition-colors shrink-0">
                     {con.status== "ACCEPTED" ? "Send Message" : "Follow"}
                   </p>
-                  </a>
+                  </button>
               </motion.div>
             ))}
           </div>
