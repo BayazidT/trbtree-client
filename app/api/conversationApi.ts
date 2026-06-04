@@ -8,15 +8,15 @@ export const getConversation = async(id: String): Promise<Conversation[]> => {
 };
 
 export const getIfConversationExist = async(id: String, participantId: String): Promise<Boolean[]> => {
-  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/conversation/${id}`);
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/conversation/${id}/${participantId}`);
 };
 
-export const createConversation = async(userId: String, reparticipantIds: String) =>{
+export const createConversation = async(userId: String, participantId: String) =>{
   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/conversation/${userId}`,
     {method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: {reparticipantIds}}
+    body: {participantId}}
   )
 }

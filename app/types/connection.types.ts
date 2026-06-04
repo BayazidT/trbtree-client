@@ -1,6 +1,6 @@
 export interface Connection {
   id: String;
-  addresseId: String;
+  addresseeId: String;
   addresseeName: String;
   requesterName: String;
   requesterId: String;
