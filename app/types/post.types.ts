@@ -1,7 +1,7 @@
 export interface PostResponse{
     id: String,
     name?: String,
-    content?: String,
+    content?: string,
     visibility?: String,
     likeCount?: number,
     commentCount?: number,
