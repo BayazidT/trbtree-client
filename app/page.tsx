@@ -130,7 +130,7 @@ export default function FeedPage() {
       console.log(error);
     }
   }
-// AFTER
+
 const handlePost = async(post: PostResponse) => {
   try {
     await createPost(post, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4");
