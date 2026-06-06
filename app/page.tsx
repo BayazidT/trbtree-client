@@ -16,6 +16,7 @@ import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnect
 import { createConversation, getConversation, getIfConversationExist } from './api/conversationApi';
 import { getPosts, createPost } from './api/postApi';
 import { PostListResponse, PostResponse } from './types/post.types';
+import ExpandablePostContent from './components/ExpandablePostContent';
 import { create } from 'domain';
 import { get } from 'http';
 const cardHover = {
@@ -80,7 +81,7 @@ export default function FeedPage() {
     totalPages: 0,
     page: 0,
     size: 0,
-  })
+  });
     
   useEffect(() => {
     getUser()
@@ -129,19 +130,20 @@ export default function FeedPage() {
       console.log(error);
     }
   }
-
-  const handlePost = async(post: PostResponse) => {
-    try {
-      await createPost(post, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4");
-      setPost({
-          id: "",
+// AFTER
+const handlePost = async(post: PostResponse) => {
+  try {
+    await createPost(post, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4");
+    setPost({
+      id: "",
       content: "",
       visibility: "PUBLIC",
     });
-    } catch (error) {
-      console.error("Error creating post:", error);
-    }
-  };
+    await getPost("60c8523c-23c7-4b7b-8a54-a9a2e69da5c4"); // ← re-fetch posts
+  } catch (error) {
+    console.error("Error creating post:", error);
+  }
+};
 
   const updateConnection = (id: String) => {
     alert("Are you sure you want to update the connection status?");
@@ -269,7 +271,7 @@ console.log(response);
               />
               <div className="flex-1">
                 <textarea
-                  // value={post}
+                  value={post.content??''}
                   onChange={(e) => setPost({ ...post, content: e.target.value })}
                   placeholder="What's on your mind?"
                   className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[90px]"
@@ -304,7 +306,7 @@ console.log(response);
                     <p className="text-sm text-gray-500 dark:text-gray-400">@{post.name} · {post.createdAt}</p>
                   </div>
                 </div>
-                <p className="text-gray-800 dark:text-gray-200 mb-4 leading-relaxed">{post.content}</p>
+                <ExpandablePostContent content={post?.content || ''} />
                 <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
                   <span>❤️ {post.likeCount}</span>
                   <span>💬 {post.commentCount}</span>
