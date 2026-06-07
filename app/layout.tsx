@@ -1,6 +1,8 @@
 import '@/app/ui/global.css';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
+import Providers from './providers';
+
 
 export default function RootLayout({
   children,
@@ -13,7 +15,9 @@ export default function RootLayout({
                        dark:from-gray-950 dark:via-gray-900 dark:to-gray-800
                        text-gray-900 dark:text-gray-100">
         <Header />
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <Footer />
       </body>
     </html>
