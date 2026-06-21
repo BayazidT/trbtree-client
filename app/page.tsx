@@ -8,7 +8,7 @@ import { myProfile } from '@/app/data/profile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getUser } from './data/user';
+import { getUser, getUserTree } from './data/user';
 import { User, UserList } from './types/auth.types';
 import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
 import { Conversation, ConversationList } from './types/conversation.types';
@@ -84,7 +84,7 @@ export default function FeedPage() {
   });
     
   useEffect(() => {
-    getUser()
+    getUserTree('0bcf6705-be5b-477b-aa44-b8c05e8d6ff2')
       .then(setUser)
       .catch(console.error);
   }, []);
