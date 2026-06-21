@@ -113,7 +113,7 @@ export default function FeedPage() {
   const getConnections =async(id: string) => {
     try {
       const response = await getConnection(id);
-      const conReceived = await getConnectionRequestSend(id);
+      const conReceived = await getConnectionRequestReceive(id);
       const conSent = await getConnectionRequestSend(id);
       setConnectionsReceived(conReceived.connections);
       setConnectionsSent(conSent.connections);
