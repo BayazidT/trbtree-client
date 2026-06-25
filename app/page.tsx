@@ -14,7 +14,7 @@ import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus
 import { Conversation, ConversationList } from './types/conversation.types';
 import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from './api/connectionApi';
 import { createConversation, getConversation, getIfConversationExist } from './api/conversationApi';
-import { getPosts, createPost } from './api/postApi';
+import { getPosts, createPost, updatePostLike } from './api/postApi';
 import { PostListResponse, PostResponse } from './types/post.types';
 import ExpandablePostContent from './components/ExpandablePostContent';
 import { create } from 'domain';
@@ -144,6 +144,11 @@ const handlePost = async(post: PostResponse) => {
     console.error("Error creating post:", error);
   }
 };
+
+const handlePostAction = async (id: String, userId: String)=>{
+  await updatePostLike(id, userId);
+
+}
 
   const updateConnection = (id: String) => {
     alert("Are you sure you want to update the connection status?");
@@ -308,7 +313,8 @@ console.log(response);
                 </div>
                 <ExpandablePostContent content={post?.content || ''} />
                 <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
-                  <span>❤️ {post.likeCount}</span>
+                  <button onClick={() => handlePostAction(post?.id, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4")}>
+                  <span>❤️ {post.likeCount}</span></button>
                   <span>💬 {post.commentCount}</span>
                 </div>
               </motion.div>
