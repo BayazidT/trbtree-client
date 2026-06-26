@@ -19,6 +19,7 @@ import { PostListResponse, PostResponse } from './types/post.types';
 import ExpandablePostContent from './components/ExpandablePostContent';
 import { create } from 'domain';
 import { get } from 'http';
+import PostComment from './components/PostComment';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },
@@ -82,6 +83,7 @@ export default function FeedPage() {
     page: 0,
     size: 0,
   });
+  let updatedLike=0;
     
   useEffect(() => {
     getUserTree('0bcf6705-be5b-477b-aa44-b8c05e8d6ff2')
@@ -145,8 +147,10 @@ const handlePost = async(post: PostResponse) => {
   }
 };
 
-const handlePostAction = async (id: String, userId: String)=>{
+const handlePostAction = async (id: String, userId: String, likeCount: any)=>{
   await updatePostLike(id, userId);
+   updatedLike= likeCount+1;
+   console.log(updatedLike);
 
 }
 
@@ -313,10 +317,12 @@ console.log(response);
                 </div>
                 <ExpandablePostContent content={post?.content || ''} />
                 <div className="flex gap-8 text-sm text-gray-600 dark:text-gray-400">
-                  <button onClick={() => handlePostAction(post?.id, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4")}>
-                  <span>❤️ {post.likeCount}</span></button>
+                  <button onClick={() => handlePostAction(post?.id, "60c8523c-23c7-4b7b-8a54-a9a2e69da5c4", post?.likeCount)}>
+                  <span>❤️ { updatedLike==0? post.likeCount: updatedLike }</span></button>
                   <span>💬 {post.commentCount}</span>
                 </div>
+                <PostComment content={post.id || ''} />
+
               </motion.div>
             ))}
           </div>
