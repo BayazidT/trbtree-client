@@ -1,7 +1,7 @@
 // Add this component above your FeedPage export
 import { useState, useEffect } from 'react';
 import { PostCommentDTO, PostCommentList } from '../types/comment.types';
-import { getPostComments } from '../api/postCommentApi';
+import { getPostComments, createPostComment } from '../api/postCommentApi';
 
 
 export default function PostComment({ content }: { content: String }) {
@@ -25,8 +25,15 @@ export default function PostComment({ content }: { content: String }) {
     setComments(response);
     console.log(response);
   }
-  const handlePost = async(content: any) =>{
-    console.log(content);
+  const handleComment = async(e: React.FormEvent) =>{
+    e.preventDefault();
+    commentContent.userId='60c8523c-23c7-4b7b-8a54-a9a2e69da5c4';
+    commentContent.postId = content;
+    await createPostComment(commentContent);
+    setCommentContent({
+      comment: '',
+    });
+        getComments(content);
   }
   return (
     <div className="mb-4">
@@ -49,8 +56,12 @@ export default function PostComment({ content }: { content: String }) {
         </button>
       )}
       <div className="flex-1">
+      <form 
+                onSubmit={handleComment} 
+                className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md space-y-6"
+                >
             <input
-                value={''}
+                value={commentContent.comment}
                 onChange={(e) => setCommentContent({ ...commentContent, comment: e.target.value })}
                 placeholder="Write a comment."
                 className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[90px]"
@@ -58,12 +69,13 @@ export default function PostComment({ content }: { content: String }) {
             />
             <div className="flex justify-end mt-4">
                 <button
-                onClick={() => handlePost( { ...commentContent, content: commentContent.comment })}
+                type='submit'
                 className="px-4 py-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none"
                 >
                 Submit
                 </button>
             </div>
+            </form>
         </div>
     </div>
     

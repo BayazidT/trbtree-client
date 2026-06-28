@@ -150,8 +150,7 @@ const handlePost = async(post: PostResponse) => {
 const handlePostAction = async (id: String, userId: String, likeCount: any)=>{
   await updatePostLike(id, userId);
    updatedLike= likeCount+1;
-   console.log(updatedLike);
-
+  await getPost("60c8523c-23c7-4b7b-8a54-a9a2e69da5c4"); // ← re-fetch posts
 }
 
   const updateConnection = (id: String) => {
