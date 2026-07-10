@@ -8,18 +8,18 @@ import { myProfile } from '@/app/data/profile';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getUser, getUserTree } from './data/user';
-import { User, UserList } from './types/auth.types';
-import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
-import { Conversation, ConversationList } from './types/conversation.types';
-import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from './api/connectionApi';
-import { createConversation, getConversation, getIfConversationExist } from './api/conversationApi';
-import { getPosts, createPost, updatePostLike } from './api/postApi';
-import { PostListResponse, PostResponse } from './types/post.types';
-import ExpandablePostContent from './components/ExpandablePostContent';
+import { getUser, getUserTree } from '../../data/user';
+import { User, UserList } from '../../types/auth.types';
+import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from '../../types/connection.types';
+import { Conversation, ConversationList } from '../../types/conversation.types';
+import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from '../../api/connectionApi';
+import { createConversation, getConversation, getIfConversationExist } from '../../api/conversationApi';
+import { getPosts, createPost, updatePostLike } from '../../api/postApi';
+import { PostListResponse, PostResponse } from '../../types/post.types';
+import ExpandablePostContent from '../../components/ExpandablePostContent';
 import { create } from 'domain';
 import { get } from 'http';
-import PostComment from './components/PostComment';
+import PostComment from '../../components/PostComment';
 const cardHover = {
   rest: { y: 0, boxShadow: '0 4px 15px rgba(0,0,0,0.2)' },
   hover: { y: -4, boxShadow: '0 15px 30px rgba(0,0,0,0.3)' },

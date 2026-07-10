@@ -24,7 +24,8 @@ export default function Header() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const navItems = ['Home', 'Bio-Data', 'Profile'];
+  const navItems = ['Home', 'Messenger', 'Profile'];
+  
 
   return (
     <motion.nav
@@ -37,13 +38,17 @@ export default function Header() {
         
         {/* Logo */}
        <Logo />
-
+ <form >
+            <input  className="border-none  focus:outline-none focus:ring-0 resize-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 ]" type='text' placeholder='Search'/>
+            <button className="px-4 py-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none" type='submit'>Search</button>
+          </form>
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+         
           {navItems.map((item) => (
             <Link
               key={item}
-              href={item === 'Home' ? '/' : `/${profile.username}/${item.toLowerCase()}`}
+              href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
               className="relative group text-gray-600 dark:text-gray-300"
             >
               {item}
