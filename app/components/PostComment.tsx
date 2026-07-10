@@ -1,4 +1,3 @@
-// Add this component above your FeedPage export
 import { useState, useEffect } from 'react';
 import { PostCommentDTO, PostCommentList } from '../types/comment.types';
 import { getPostComments, createPostComment } from '../api/postCommentApi';
@@ -16,9 +15,7 @@ export default function PostComment({ content }: { content: String }) {
 
   useEffect(() =>{
     getComments(content);
-
-
-  }, []);
+  }, [content]);
 
   const getComments = async(postId: String) =>{
     const response = await getPostComments(postId);
@@ -58,13 +55,13 @@ export default function PostComment({ content }: { content: String }) {
       <div className="flex-1">
       <form 
                 onSubmit={handleComment} 
-                className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md space-y-6"
+                className="max-w-3xl mx-auto  p-3 rounded-lg shadow-md"
                 >
-            <input
+            <textarea
                 value={commentContent.comment}
                 onChange={(e) => setCommentContent({ ...commentContent, comment: e.target.value })}
                 placeholder="Write a comment."
-                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 min-h-[90px]"
+                className="w-full bg-transparent border-none focus:outline-none focus:ring-0 resize-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 ]"
                 
             />
             <div className="flex justify-end mt-4">
