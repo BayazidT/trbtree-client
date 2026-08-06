@@ -38,8 +38,8 @@ export default function Header() {
         
         {/* Logo */}
        <Logo />
- <form >
-            <input  className="border-none  focus:outline-none focus:ring-0 resize-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 ]" type='text' placeholder='Search'/>
+        <form action={'/search'} method='GET'>
+            <input  className="border-none  focus:outline-none focus:ring-0 resize-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 ]" type='text' placeholder='Search' name='search'/>
             <button className="px-4 py-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none" type='submit'>Search</button>
           </form>
         {/* Desktop Menu */}

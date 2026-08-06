@@ -9,7 +9,9 @@ export const getUser = async (): Promise<UserList> => {
 export const getUserTree = async (id: string): Promise<UserList> => {
   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/users/tree/${id}?page=0&size=10`);
 };
-
+export const getFilterUsers = async (search: any): Promise<UserList> => {
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/users?page=0&size=10&search=${search}`);
+};
 export const getUserById = async (id: string): Promise<User> => {
   return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/users/${id}`);
 };
