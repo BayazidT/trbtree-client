@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { PostCommentDTO, PostCommentList } from '../types/comment.types';
-import { getPostComments, createPostComment } from '../api/postCommentApi';
+import { getPostComments, deletePostComment } from '../api/postCommentApi';
 
 
 export default function PostComment({ content }: { content: String }) {
@@ -22,15 +22,20 @@ export default function PostComment({ content }: { content: String }) {
     setComments(response);
     console.log(response);
   }
-  const handleComment = async(e: React.FormEvent) =>{
-    e.preventDefault();
-    commentContent.userId='60c8523c-23c7-4b7b-8a54-a9a2e69da5c4';
-    commentContent.postId = content;
-    await createPostComment(commentContent);
-    setCommentContent({
-      comment: '',
-    });
+  const handleComment = async(commentId: any) =>{
+    
+    // commentContent.userId='60c8523c-23c7-4b7b-8a54-a9a2e69da5c4';
+    // commentContent.postId = content;
+    // await createPostComment(commentContent);
+    // setCommentContent({
+    //   comment: '',
+    // });
         getComments(content);
+  }
+  const deleteComment = async(commentId: any) =>{
+    await deletePostComment(commentId);
+    console.log(`Comment deleted with id : ${commentId}`);
+    getComments(content);
   }
   return (
     <div className="mb-4">
@@ -40,7 +45,9 @@ export default function PostComment({ content }: { content: String }) {
         }`}
       >
         {comments?.content.map((com)=>(
-            <p><span>{com.name}: </span>{com.comment}</p>
+            <p><span>{com.name}: </span>{com.comment}
+            <button className='mt-1 text-teal-600 dark:text-teal-400 text-sm font-medium hover:underline focus:outline-none' 
+            onClick={() =>deleteComment(com?.id)}> Delete</button></p>
         ))}
       </p>
        
