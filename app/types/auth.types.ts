@@ -28,3 +28,18 @@ export interface UserList {
     logout: () => void;
     refreshAccessToken: () => Promise<void>;
   }
+
+  export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+}
+
+export interface UserProfile {
+  id: string;
+  username: string;
+  email: string;
+  name: string;
+  roles: string[];
+  permissions: string[];
+}
