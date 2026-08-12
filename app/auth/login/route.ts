@@ -1,10 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import { backendFetch } from "@/app/lib/auth/backend";
+import { AuthResponse } from "@/app/types/auth.types";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const backendRes = await fetch(
-    "https://your-spring-api.com/auth/login",
+  const backendRes = await backendFetch(
+    "public/auth/login",
     {
       method: "POST",
       headers: {
@@ -34,6 +36,15 @@ export async function POST(req: Request) {
     path: "/",
     maxAge: 60 * 60 * 24,
   });
+
+  res.cookies.set("refresh_token", data.access_token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24,
+    // path: "/auth/"
+    // maxAge: Math.floor(data.expiresIn / 1000),
+  } );
 
   return res;
 }
