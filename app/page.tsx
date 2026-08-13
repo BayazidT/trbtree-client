@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getUser, getUserTree } from './data/user';
-import { User, UserList } from './types/auth.types';
+import { User, UserList, UserProfile } from './types/auth.types';
 import { Connection, ConnectionRequest, ConnectionResponseList, ConnectionStatus } from './types/connection.types';
 import { Conversation, ConversationList } from './types/conversation.types';
 import { getConnection,updateConnectionStatus, sendConnectionRequest, getConnectionRequestReceive, getConnectionRequestSend } from './api/connectionApi';
@@ -56,7 +56,7 @@ export default function FeedPage() {
   const profile = myProfile;
   const router = useRouter();
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [postContent, setPostContent] = useState('');
+  const [userProfile, setUserProfile] = useState<UserProfile| null>();
   const [connections, setConnections] = useState<Connection[] | null>();
   const [connectionsSent, setConnectionsSent] = useState<Connection[] | null>();
   const [connectionsReceived, setConnectionsReceived] = useState<Connection[] | null>();
@@ -84,16 +84,24 @@ export default function FeedPage() {
     size: 0,
   });
   let updatedLike=0;
+  const id = localStorage.getItem('userId');
+
     
   useEffect(() => {
-    getUserTree('0bcf6705-be5b-477b-aa44-b8c05e8d6ff2')
+    getUserProfile();
+    console.log(userProfile);
+    if(id != null)
+    getUserTree(id)
       .then(setUser)
       .catch(console.error);
   }, []);
+
   useEffect(()=>{
-        getConnections("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2");
-        getConversations("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2")
-        getPost('60c8523c-23c7-4b7b-8a54-a9a2e69da5c4');
+    if(id != null){
+        getConnections(id);
+        getConversations(id)
+        getPost(id);
+  }
       
       }, []);
 
@@ -111,6 +119,15 @@ export default function FeedPage() {
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  const getUserProfile = async() =>{
+    const response = await fetch("/auth/profile");
+    if (response.ok) {
+      const user = await response.json();
+      setUserProfile(user);
+    localStorage.setItem('userId', user.id);
+    }
+  }
 
   const getConnections =async(id: string) => {
     try {
@@ -172,10 +189,8 @@ const handlePostAction = async (id: String, userId: String, likeCount: any)=>{
   }
   const handleConversation = async (perticipantId: String) => {
     const response = await getIfConversationExist("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
-console.log(response);
     if(!response){
     await createConversation("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
-    console.log("Conversation created");
     }    
 
       router.push('/messenger');
@@ -186,6 +201,8 @@ console.log(response);
     await sendConnectionRequest("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", id);
 
   }
+
+  
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">

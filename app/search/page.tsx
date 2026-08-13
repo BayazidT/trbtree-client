@@ -106,7 +106,6 @@ export default function FeedPage() {
 
   const handleConversation = async (perticipantId: String) => {
     const response = await getIfConversationExist("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
-console.log(response);
     if(!response){
     await createConversation("0bcf6705-be5b-477b-aa44-b8c05e8d6ff2", perticipantId);
     console.log("Conversation created");

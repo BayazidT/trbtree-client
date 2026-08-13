@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   const data = await backendRes.json();
 
   // assuming backend returns: { token: "..." }
-  const token = data.token;
+  const token = data.accessToken;
 
   const res = NextResponse.json({ success: true });
 
@@ -34,10 +34,11 @@ export async function POST(req: NextRequest) {
     httpOnly: true,
     secure: true,
     path: "/",
+    sameSite: "lax",
     maxAge: 60 * 60 * 24,
   });
 
-  res.cookies.set("refresh_token", data.access_token, {
+  res.cookies.set("refresh_token", data.refreshToken, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
