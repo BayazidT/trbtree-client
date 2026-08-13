@@ -20,7 +20,6 @@ export default function PostComment({ content }: { content: String }) {
   const getComments = async(postId: String) =>{
     const response = await getPostComments(postId);
     setComments(response);
-    console.log(response);
   }
   const handleComment = async(commentId: any) =>{
     
