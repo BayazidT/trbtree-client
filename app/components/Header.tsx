@@ -2,29 +2,49 @@
 
 import { useEffect, useState } from 'react';
 import { myBio } from '@/app/data/bio-data';
+import { useAuthStore } from '../stores/auth-store';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const profile = myBio;
+
+  const router = useRouter();
+
+  const {
+    user,
+    loading: authLoading,
+    loadUser,
+    logout,
+  } = useAuthStore();
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    loadUser();
     const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
     if (saved) setTheme(saved);
     else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
       setTheme('dark');
-  }, []);
+  }, [loadUser]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const navItems = ['Home', 'Messenger', 'Profile'];
+  let navItems =[];
+  if(user){
+   navItems = ['Home', 'Messenger', 'Profile'];
+
+  }else{
+   navItems = ['Home', 'Sign Up', 'Sign in'];
+
+  }
+
   
 
   return (
@@ -56,6 +76,12 @@ export default function Header() {
                                bg-teal-500 transition-all group-hover:w-full" />
             </Link>
           ))}
+          <button
+                onClick={async() => await logout()}
+                className="text-left text-gray-700 dark:text-gray-300"
+              >
+                Logout
+              </button>
 
           <button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
@@ -63,6 +89,8 @@ export default function Header() {
           >
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
+          
+          
         </div>
 
         {/* Mobile Hamburger */}
@@ -104,7 +132,14 @@ export default function Header() {
               >
                 {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
               </button>
+              <button
+                onClick={async() => await logout()}
+                className="text-left text-gray-700 dark:text-gray-300"
+              >
+                Logout
+              </button>
             </div>
+
           </motion.div>
         )}
       </AnimatePresence>
