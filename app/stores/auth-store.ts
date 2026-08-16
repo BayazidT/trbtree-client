@@ -4,7 +4,7 @@ import type { UserProfile } from "../types/auth.types";
 interface AuthState {
   user: UserProfile | null;
   loading: boolean;
-
+  initialized: boolean;
   loadUser: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -12,35 +12,49 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   loading: true,
-
-  loadUser: async () => {
+  initialized: false,
+    loadUser: async () => {
     try {
-      const response = await fetch("auth/profile", {
-        credentials: "include",
+      set({ loading: true });
+
+      const response = await fetch('/auth/profile', {
+        method: 'GET',
+        credentials: 'include',
       });
 
       if (!response.ok) {
         set({
           user: null,
-          loading: false,
+          initialized: true,
         });
-
         return;
       }
 
-      const user: UserProfile = await response.json();
+      const text = await response.text();
+
+      if (!text) {
+        set({
+          user: null,
+          initialized: true,
+        });
+        return;
+      }
+
+      const user = JSON.parse(text);
 
       set({
         user,
-        loading: false,
+        initialized: true,
       });
     } catch (error) {
-      console.error("Failed to load user:", error);
+      console.error('loadUser error:', error);
 
       set({
         user: null,
-        loading: false,
+        initialized: true,
       });
+    } finally {
+      set({ loading: false });
     }
   },
 
