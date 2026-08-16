@@ -13,37 +13,49 @@ export default function Header() {
 
   const router = useRouter();
 
-  const {
-    user,
-    loading: authLoading,
-    loadUser,
-    logout,
-  } = useAuthStore();
-
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [isOpen, setIsOpen] = useState(false);
 
+  const {
+  user,
+  loading: authLoading,
+  initialized,
+  loadUser,
+  logout,
+} = useAuthStore();
+
+useEffect(() => {
+  loadUser();
+}, [loadUser]);
+
+const handleLogout = async () => {
+  await logout();
+  router.push('/user/login');
+};
+
+const navItems = user
+  ? [
+      { label: 'Home', href: '/' },
+      { label: 'Messenger', href: `/${user.username}/messenger` },
+      { label: 'Profile', href: `/${user.username}/profile` },
+    ]
+  : [
+      { label: 'Home', href: '/' },
+      { label: 'Sign Up', href: '/signup' },
+      { label: 'Sign In', href: '/user/login' },
+    ];
+
   useEffect(() => {
-    loadUser();
     const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
     if (saved) setTheme(saved);
     else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
       setTheme('dark');
-  }, [loadUser]);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
-
-  let navItems =[];
-  if(user){
-   navItems = ['Home', 'Messenger', 'Profile'];
-
-  }else{
-   navItems = ['Home', 'Sign Up', 'Sign in'];
-
-  }
 
   
 
@@ -63,35 +75,27 @@ export default function Header() {
             <button className="px-4 py-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none" type='submit'>Search</button>
           </form>
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-         
-          {navItems.map((item) => (
-            <Link
-              key={item}
-              href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-              className="relative group text-gray-600 dark:text-gray-300"
-            >
-              {item}
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0
-                               bg-teal-500 transition-all group-hover:w-full" />
-            </Link>
-          ))}
-          <button
-                onClick={async() => await logout()}
+        {/* {initialized && ( */}
+  <div className="hidden md:flex items-center gap-8">
+    {navItems.map((item) => (
+      <Link key={item.label} href={item.href}>
+        {item.label}
+      </Link>
+    ))}
+
+    {user && (
+      <button onClick={handleLogout}>
+        Logout
+      </button>
+    )}
+    <button
+                onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
                 className="text-left text-gray-700 dark:text-gray-300"
               >
-                Logout
+                {theme === 'light' ? '🌙' : '☀️'}
               </button>
-
-          <button
-            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            className="p-2 rounded-full bg-gray-100 dark:bg-gray-800"
-          >
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
-          
-          
-        </div>
+  </div>
+{/* )} */}
 
         {/* Mobile Hamburger */}
         <button
@@ -115,7 +119,7 @@ export default function Header() {
             className="md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-800"
           >
             <div className="flex flex-col px-6 py-4 space-y-4 text-sm font-medium">
-              {navItems.map((item) => (
+              {/* {navItems.map((item) => (
                 <Link
                   key={item}
                   href={item === 'Home' ? '/' : `/${profile.username}/${item.toLowerCase()}`}
@@ -137,7 +141,7 @@ export default function Header() {
                 className="text-left text-gray-700 dark:text-gray-300"
               >
                 Logout
-              </button>
+              </button> */}
             </div>
 
           </motion.div>

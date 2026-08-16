@@ -1,8 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
 import { backendFetch } from "@/app/lib/auth/backend";
 import { AuthResponse } from "@/app/types/auth.types";
+import { useAuthStore } from "@/app/stores/auth-store";
 
 export async function POST(req: NextRequest) {
+
+  // const { loadUser } = useAuthStore();
   const body = await req.json();
 
   const backendRes = await backendFetch(
