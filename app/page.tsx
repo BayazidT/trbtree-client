@@ -34,7 +34,9 @@ import {
 import {
   getPosts,
   createPost,
+  updatePost,
   updatePostLike,
+  deletePostById
 } from './api/postApi';
 
 import {
@@ -473,7 +475,7 @@ export default function FeedPage() {
 
   const editPost = (post: PostResponse) => {
   setEditingPostId(post?.id);
-  setEditingContent(post?.content || '');
+  setEditingContent(post?.content || ''); 
 };
 
   /*
@@ -634,9 +636,9 @@ export default function FeedPage() {
     setSavingPost(true);
 
     // Replace this with your actual updatePost API function
-    // await updatePost(postId, {
-    //   content: editingContent,
-    // });
+    await updatePost(postId, {
+      content: editingContent,
+    });
 
     // Reload posts
     await getPost(user.id);
@@ -651,6 +653,12 @@ export default function FeedPage() {
     setSavingPost(false);
   }
 };
+
+const deletePost = async (id: String) =>{
+  await deletePostById(id);
+  await getPosts(user.id);
+}
+
 
   /*
    * ============================================================
@@ -902,13 +910,26 @@ export default function FeedPage() {
                     <div className="flex justify-end mt-4 ml-3">
 
                       {user?.name === postItem.name && (
-                        <button
+                       <div className='flex flex-end'>
+                         <button
                           onClick={() =>
                             editPost(postItem)
                           }
                         >
                           Edit
+                        </button> | 
+                        <button
+                          onClick={() =>
+                            deletePost(postItem?.id)
+                          }
+                          className='m-1
+                                text-red-700 dark:text-red-300
+                                hover:bg-gray-100
+                                dark:hover:bg-gray-800'
+                        >
+                          Delete
                         </button>
+                        </div>
                       )}
 
                     </div>

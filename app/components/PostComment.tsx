@@ -45,7 +45,7 @@ export default function PostComment({ content }: { content: String }) {
       >
         {comments?.content.map((com)=>(
             <p><span>{com.name}: </span>{com.comment}
-            <button className='mt-1 text-teal-600 dark:text-teal-400 text-sm font-medium hover:underline focus:outline-none' 
+            <button className='m-3 text-teal-600 dark:text-teal-400 text-sm font-medium hover:underline focus:outline-none' 
             onClick={() =>deleteComment(com?.id)}> Delete</button></p>
         ))}
       </p>
