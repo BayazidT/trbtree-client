@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PostCommentDTO, PostCommentList } from '../types/comment.types';
-import { getPostComments, deletePostComment } from '../api/postCommentApi';
-
+import { getPostComments, deletePostComment,createPostComment } from '../api/postCommentApi';
+import { useAuthStore } from '../stores/auth-store';
 
 export default function PostComment({ content }: { content: String }) {
   const [expanded, setExpanded] = useState(false);
@@ -12,6 +12,12 @@ export default function PostComment({ content }: { content: String }) {
   });
   const [comments, setComments] = useState<PostCommentList>();
   const isLong = true;
+const {
+    user,
+    loading: authLoading,
+    initialized,
+    loadUser,
+  } = useAuthStore();
 
   useEffect(() =>{
     getComments(content);
@@ -23,12 +29,12 @@ export default function PostComment({ content }: { content: String }) {
   }
   const handleComment = async(commentId: any) =>{
     
-    // commentContent.userId='60c8523c-23c7-4b7b-8a54-a9a2e69da5c4';
-    // commentContent.postId = content;
-    // await createPostComment(commentContent);
-    // setCommentContent({
-    //   comment: '',
-    // });
+    commentContent.userId=user?.id;
+    commentContent.postId = content;
+    await createPostComment(commentContent);
+    setCommentContent({
+      comment: '',
+    });
         getComments(content);
   }
   const deleteComment = async(commentId: any) =>{
@@ -44,9 +50,10 @@ export default function PostComment({ content }: { content: String }) {
         }`}
       >
         {comments?.content.map((com)=>(
-            <p><span>{com.name}: </span>{com.comment}
+            <p className='text-sm'><span>{com.name}: </span>{com.comment}
+            {(user?.id==com.userId) &&(
             <button className='m-3 text-teal-600 dark:text-teal-400 text-sm font-medium hover:underline focus:outline-none' 
-            onClick={() =>deleteComment(com?.id)}> Delete</button></p>
+            onClick={() =>deleteComment(com?.id)}> Delete</button>)}</p>
         ))}
       </p>
        
@@ -72,7 +79,7 @@ export default function PostComment({ content }: { content: String }) {
             />
             <div className="flex justify-end mt-4">
                 <button
-                type='submit'
+                // type='submit'
                 className="px-4 py-1 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-full font-medium transition-all shadow-md hover:shadow-lg disabled:shadow-none"
                 >
                 Submit

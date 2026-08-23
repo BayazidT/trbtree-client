@@ -635,7 +635,6 @@ export default function FeedPage() {
   try {
     setSavingPost(true);
 
-    // Replace this with your actual updatePost API function
     await updatePost(postId, {
       content: editingContent,
     });
@@ -696,7 +695,7 @@ const deletePost = async (id: String) =>{
               >
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">
-                    {con.addresseeName}
+                    {con.requesterName}
                   </h3>
                 </div>
 
@@ -734,7 +733,7 @@ const deletePost = async (id: String) =>{
                 <div className="flex-1 min-w-0">
 
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate">
-                    {con.addresseeName}
+                    {con.requesterName}
                   </h3>
 
                 </div>
@@ -909,8 +908,8 @@ const deletePost = async (id: String) =>{
 
                     <div className="flex justify-end mt-4 ml-3">
 
-                      {user?.name === postItem.name && (
-                       <div className='flex flex-end'>
+                      {user?.id === postItem.userId && (
+                       <div className=''>
                          <button
                           onClick={() =>
                             editPost(postItem)
