@@ -37,8 +37,8 @@ const {
     });
         getComments(content);
   }
-  const deleteComment = async(commentId: any) =>{
-    await deletePostComment(commentId);
+  const deleteComment = async(commentId: any, postId: String) =>{
+    await deletePostComment(commentId, postId);
     console.log(`Comment deleted with id : ${commentId}`);
     getComments(content);
   }
@@ -53,7 +53,7 @@ const {
             <p className='text-sm'><span>{com.name}: </span>{com.comment}
             {(user?.id==com.userId) &&(
             <button className='m-3 text-teal-600 dark:text-teal-400 text-sm font-medium hover:underline focus:outline-none' 
-            onClick={() =>deleteComment(com?.id)}> Delete</button>)}</p>
+            onClick={() =>deleteComment(com?.id, content)}> Delete</button>)}</p>
         ))}
       </p>
        

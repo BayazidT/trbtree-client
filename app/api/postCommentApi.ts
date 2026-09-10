@@ -13,8 +13,8 @@ export const getPostComments = async(postId: String): Promise<PostCommentList> =
 }
 
 
-export const deletePostComment = async(commentId: any) => {
-  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/post/comment/${commentId}`, {
+export const deletePostComment = async(commentId: any, postId: String) => {
+  return fetchAPI(`http://localhost:8081/trbtree-service/api/v1/private/post/comment/${commentId}/post/${postId}`, {
     method: "DELETE"
   });
 }
